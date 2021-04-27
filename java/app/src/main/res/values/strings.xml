@@ -2,4 +2,7 @@
     <string name="app_name">Projetpiece</string>
     <string name="QTEText">Quantité disponible : </string>
     <string name="textCategorie">Catégorie : </string>
+    <string name="textDateDebut">Date Début : </string>
+    <string name="textDateFin">Date fin : </string>
+
 </resources>

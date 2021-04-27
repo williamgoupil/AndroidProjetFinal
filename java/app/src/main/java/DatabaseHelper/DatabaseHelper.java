@@ -17,6 +17,7 @@ import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -260,7 +261,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
+    /**
+     * Méthode pour retourner la liste de tous les emprunts
+     *
+     */
+    public List<Empruntpersonnel> getListEmprunts(){
+        List<Empruntpersonnel> listEmprunt = new ArrayList<>();
 
+        String query = "SELECT * FROM " + TABLE_EMPRUNTPERSONNEL;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            do {
+                int id = c.getInt(c.getColumnIndex(KEY_ID));
+                int QTEEmprunter = c.getInt(c.getColumnIndex(KEY_QTEEMPRUNTER));
+                /*
+                String DateDebut = c.getString(c.getColumnIndex(KEY_DATEDEMANDE));
+                String DateFin = c.getString(c.getColumnIndex(KEY_DATEFIN));
+                */
+                String etat = c.getString(c.getColumnIndex(KEY_ETATCOURANT));
+                int piece = c.getInt(c.getColumnIndex(KEY_IDPIECE));
+                /*
+                Empruntpersonnel E = new Empruntpersonnel (QTEEmprunter,DateDebut,DateFin,etat,piece);
+                E.setId(id);
+                listEmprunt.add(E);
+                */
+            } while (c.moveToNext());
+        }
+
+        return listEmprunt;
+    }
 
 
 }

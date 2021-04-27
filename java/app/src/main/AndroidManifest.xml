@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Projetpiece">
         <activity android:name=".InventaireActivity"></activity>
+        <activity android:name=".EmpruntActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
