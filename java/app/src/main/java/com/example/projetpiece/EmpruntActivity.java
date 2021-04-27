@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,6 @@ public class EmpruntActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO VALIDER LE NOM DU LAYOUT
         setContentView(R.layout.activity_liste_emprunt);
         setTitle("Liste des emprunts");
 
@@ -44,8 +44,12 @@ public class EmpruntActivity extends AppCompatActivity {
 
 
         recyclerView = (RecyclerView) findViewById(R.id.RVEmprunt);
-        listEmprunt = db.getListEmprunts();
-
+        try {
+            listEmprunt = db.getListEmprunts();
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         AdapterEmprunt adapterEmprunt = new AdapterEmprunt(this,listEmprunt, recyclerView);
         recyclerView.setAdapter(adapterEmprunt);

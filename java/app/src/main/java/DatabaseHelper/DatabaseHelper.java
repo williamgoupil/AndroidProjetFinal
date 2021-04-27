@@ -16,6 +16,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -74,7 +76,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         private static final String CREATE_TABLE_EMPRUNTPERSONNEL = "CREATE TABLE " + TABLE_EMPRUNTPERSONNEL +
                 "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_QTEEMPRUNTER + " INTEGER," + KEY_DATEDEMANDE + " INTEGER, " +
-                KEY_DATEFIN + " DATE, " + KEY_ETATCOURANT + "VARCHAR, " + KEY_IDUSER + " INTEGER," +
+                KEY_DATEFIN + " DATE, " + KEY_ETATCOURANT + " VARCHAR, " + KEY_IDUSER + " INTEGER," +
                 KEY_IDPIECE + " INTEGER, " +
                 "FOREIGN KEY (" + KEY_IDPIECE + ") REFERENCES " + TABLE_PIECE + " (" + KEY_ID + "))";
 
@@ -196,7 +198,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param e La reservation à insérer dans la BD
      */
     public void addEmprunt(Empruntpersonnel e){
+        SQLiteDatabase database = this.getWritableDatabase();
 
+        ContentValues values = new ContentValues();
+
+        values.put(KEY_QTEEMPRUNTER, e.getQTEEmprunter());
+        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
+        String strDate = formatter.format(e.getDateDemande());
+        values.put(KEY_DATEDEMANDE, strDate);
+        strDate = formatter.format(e.getDateFin());
+        values.put(KEY_DATEFIN, strDate);
+        values.put(KEY_ETATCOURANT, e.getEtatCourant());
+        values.put(KEY_IDUSER, 1);
+        values.put(KEY_IDPIECE, e.getPiece());
+
+        database.insertOrThrow(TABLE_EMPRUNTPERSONNEL, null, values);
     }
 
 
@@ -265,7 +281,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Méthode pour retourner la liste de tous les emprunts
      *
      */
-    public List<Empruntpersonnel> getListEmprunts(){
+    public List<Empruntpersonnel> getListEmprunts() throws ParseException {
         List<Empruntpersonnel> listEmprunt = new ArrayList<>();
 
         String query = "SELECT * FROM " + TABLE_EMPRUNTPERSONNEL;
@@ -277,22 +293,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             do {
                 int id = c.getInt(c.getColumnIndex(KEY_ID));
                 int QTEEmprunter = c.getInt(c.getColumnIndex(KEY_QTEEMPRUNTER));
-                /*
-                String DateDebut = c.getString(c.getColumnIndex(KEY_DATEDEMANDE));
-                String DateFin = c.getString(c.getColumnIndex(KEY_DATEFIN));
-                */
+                String StrDateDebut = c.getString(c.getColumnIndex(KEY_DATEDEMANDE));
+                String StrDateFin = c.getString(c.getColumnIndex(KEY_DATEFIN));
                 String etat = c.getString(c.getColumnIndex(KEY_ETATCOURANT));
                 int piece = c.getInt(c.getColumnIndex(KEY_IDPIECE));
-                /*
-                Empruntpersonnel E = new Empruntpersonnel (QTEEmprunter,DateDebut,DateFin,etat,piece);
+                SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
+                Date DateDebut = formatter.parse(StrDateDebut);
+                Date DateFin = formatter.parse(StrDateFin);
+                Empruntpersonnel E = new Empruntpersonnel (QTEEmprunter, DateDebut, DateFin, etat, piece);
                 E.setId(id);
                 listEmprunt.add(E);
-                */
             } while (c.moveToNext());
         }
 
         return listEmprunt;
     }
-
-
 }
