@@ -198,7 +198,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param e La reservation à insérer dans la BD
      */
     public void addEmprunt(Empruntpersonnel e){
+        SQLiteDatabase database = this.getWritableDatabase();
 
+        ContentValues values = new ContentValues();
+
+        values.put(KEY_QTEEMPRUNTER, e.getQTEEmprunter());
+        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
+        String strDate = formatter.format(e.getDateDemande());
+        values.put(KEY_DATEDEMANDE, strDate);
+        strDate = formatter.format(e.getDateFin());
+        values.put(KEY_DATEFIN, strDate);
+        values.put(KEY_ETATCOURANT, e.getEtatCourant());
+        values.put(KEY_IDUSER, 1);
+        values.put(KEY_IDPIECE, e.getPiece());
+
+        database.insertOrThrow(TABLE_PIECE, null, values);
     }
 
 
@@ -283,7 +297,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String StrDateFin = c.getString(c.getColumnIndex(KEY_DATEFIN));
                 String etat = c.getString(c.getColumnIndex(KEY_ETATCOURANT));
                 int piece = c.getInt(c.getColumnIndex(KEY_IDPIECE));
-                SimpleDateFormat formatter = new SimpleDateFormat("YYYY/MM/DD h:m:s");
+                SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
                 Date DateDebut = formatter.parse(StrDateDebut);
                 Date DateFin = formatter.parse(StrDateFin);
                 Empruntpersonnel E = new Empruntpersonnel (QTEEmprunter, DateDebut, DateFin, etat, piece);
