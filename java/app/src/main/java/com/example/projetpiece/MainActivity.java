@@ -34,15 +34,50 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Categorie c = new Categorie();
+        c.setNom("MOTOR");
+        Piece p = new Piece();
+        p.setCategorie(1);
+        p.setDescription("Ceci est un moteur electrique");
+        p.setNom("Moteur Electrique");
+        p.setQTEDisponible(5);
+        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
 
-        Button button = (Button) findViewById(R.id.buttonInventaire);
-        button.setOnClickListener(new View.OnClickListener() {
+        String StrDateDebut = new String("2020-04-27");
+        Date d1 = null;
+        try {
+            d1 = formatter.parse(StrDateDebut);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        ;
+        Empruntpersonnel e = new Empruntpersonnel();
+        e.setPiece(1);
+        e.setQTEEmprunter(2);
+        e.setEtatCourant("Emprunter");
+        e.setDateDemande(d1);
+        e.setDateFin(d1);
+
+        db = DatabaseHelper.getInstance(this);
+        
+        db.addCategorie(c);
+        db.addPiece(p);
+        db.addEmprunt(e);
+
+        Button buttonInventaire = (Button) findViewById(R.id.buttonInventaire);
+        buttonInventaire.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, InventaireActivity.class);
                 startActivity(intent);
             }
         });
-
+        Button buttonEmprunt = (Button) findViewById(R.id.buttonemprunt);
+        buttonEmprunt.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, EmpruntActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }

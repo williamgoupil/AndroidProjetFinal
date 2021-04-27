@@ -15,12 +15,27 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/buttonInventaire"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="174dp"
-        tools:layout_editor_absoluteY="222dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/buttonInventaire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inventaire" />
+
+        <Button
+            android:id="@+id/buttonemprunt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Emprunt" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
