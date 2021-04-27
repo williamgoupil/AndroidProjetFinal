@@ -8,6 +8,7 @@
 package com.example.projetpiece;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,9 +85,14 @@ public class AdapterInventaire extends RecyclerView.Adapter<AdapterInventaire.My
 
         @Override
         public void onClick(View v) {
+            context = v.getContext();
+            Intent intent = new Intent(context,ficheTechniqueActivity.class);
+
             int piecePosition = RVInventaire.getChildLayoutPosition(v);
             String item = String.valueOf(listPiece.get(piecePosition).getId());
-            //Toast.makeText(v.getContext(),item,Toast.LENGTH_SHORT).show();
+
+            intent.putExtra("id", item);
+            context.startActivity(intent);
         }
     }
 }
