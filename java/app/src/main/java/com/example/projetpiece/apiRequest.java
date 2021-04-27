@@ -15,27 +15,29 @@
 
 package com.example.projetpiece;
 
-import org.json.JSONException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.text.ParseException;
 import java.util.Scanner;
 
 public class apiRequest {
 
 
     URL url;
-    public void fetchInventory(){
+
+    public static void main(String[] args) {
         try {
-            url = new URL("http://127.0.0.1:8000/api-mobile-list");
+
+            URL url = new URL("https://api.covid19api.com/summary");
+
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.connect();
 
+            //Getting the response code
             int responsecode = conn.getResponseCode();
 
             if (responsecode != 200) {
@@ -53,23 +55,32 @@ public class apiRequest {
                 //Close the scanner
                 scanner.close();
 
+                //Using the JSON simple library parse the string into a json object
+                JSONParser parse = new JSONParser();
+                JSONObject data_obj = (JSONObject) parse.parse(inline);
 
+                //Get the required object from the above created object
+                JSONObject obj = (JSONObject) data_obj.get("Global");
+
+                //Get the required data using its key
+                System.out.println(obj.get("TotalRecovered"));
+
+                JSONArray arr = (JSONArray) data_obj.get("Countries");
+
+                for (int i = 0; i < arr.length(); i++) {
+
+                    JSONObject new_obj = (JSONObject) arr.get(i);
+
+                    if (new_obj.get("Slug").equals("albania")) {
+                        System.out.println("Total Recovered: " + new_obj.get("TotalRecovered"));
+                        break;
+                    }
+                }
             }
 
-        } catch (MalformedURLException | ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
-
-
-
 
 }
