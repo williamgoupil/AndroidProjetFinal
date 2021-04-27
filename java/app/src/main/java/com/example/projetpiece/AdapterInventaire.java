@@ -86,7 +86,7 @@ public class AdapterInventaire extends RecyclerView.Adapter<AdapterInventaire.My
         public void onClick(View v) {
             int piecePosition = RVInventaire.getChildLayoutPosition(v);
             String item = String.valueOf(listPiece.get(piecePosition).getId());
-            Toast.makeText(v.getContext(),item,Toast.LENGTH_SHORT).show();
+            //Toast.makeText(v.getContext(),item,Toast.LENGTH_SHORT).show();
         }
     }
 }
