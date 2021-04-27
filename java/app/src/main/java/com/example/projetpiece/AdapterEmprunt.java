@@ -16,13 +16,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import DatabaseHelper.DatabaseHelper;
 import model.Empruntpersonnel;
 import model.Piece;
 
-
+//TODO: Trouver pourquoi 1 seul item dans recycle view et trouver pourquoi date comme ça
 public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHolder>{
 
     private Context context;
@@ -56,12 +58,15 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         db = DatabaseHelper.getInstance(context);
-        //db.get
-        String nomPiece = String.valueOf(listEmprunt.get(position).getPiece());
-        //holder.nompiece.setText();
+        int IdPiece = listEmprunt.get(position).getPiece();
+        String nomPiece =  db.getOnePieceById(Integer.toString(IdPiece)).getNom();
+        holder.nompiece.setText(nomPiece);
         holder.etat.setText(String.valueOf(listEmprunt.get(position).getEtatCourant()));
-        holder.dateInit.setText(String.valueOf(listEmprunt.get(position).getDateDemande()));
-        holder.dateFin.setText(String.valueOf(listEmprunt.get(position).getDateFin()));
+        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
+        String tempDate = formatter.format(listEmprunt.get(position).getDateDemande());
+        holder.dateInit.setText(tempDate);
+        tempDate = formatter.format(listEmprunt.get(position).getDateFin());
+        holder.dateFin.setText(tempDate);
     }
 
     @Override
