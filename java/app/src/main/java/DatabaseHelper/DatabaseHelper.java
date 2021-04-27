@@ -76,7 +76,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         private static final String CREATE_TABLE_EMPRUNTPERSONNEL = "CREATE TABLE " + TABLE_EMPRUNTPERSONNEL +
                 "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_QTEEMPRUNTER + " INTEGER," + KEY_DATEDEMANDE + " INTEGER, " +
-                KEY_DATEFIN + " DATE, " + KEY_ETATCOURANT + "VARCHAR, " + KEY_IDUSER + " INTEGER," +
+                KEY_DATEFIN + " DATE, " + KEY_ETATCOURANT + " VARCHAR, " + KEY_IDUSER + " INTEGER," +
                 KEY_IDPIECE + " INTEGER, " +
                 "FOREIGN KEY (" + KEY_IDPIECE + ") REFERENCES " + TABLE_PIECE + " (" + KEY_ID + "))";
 
@@ -308,6 +308,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return listEmprunt;
     }
-
-
 }

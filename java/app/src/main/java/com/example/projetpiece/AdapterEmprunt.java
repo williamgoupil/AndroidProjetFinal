@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import DatabaseHelper.DatabaseHelper;
 import model.Empruntpersonnel;
 import model.Piece;
 
@@ -31,6 +32,7 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
     private RecyclerView RVEmprunt;
 
     final View.OnClickListener onClickListener = new MyOnClickListener();
+    DatabaseHelper db;
 
 
     @NonNull
@@ -53,7 +55,10 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.nompiece.setText(String.valueOf(listEmprunt.get(position).getPiece()));
+        db = DatabaseHelper.getInstance(context);
+        //db.get
+        String nomPiece = String.valueOf(listEmprunt.get(position).getPiece());
+        //holder.nompiece.setText();
         holder.etat.setText(String.valueOf(listEmprunt.get(position).getEtatCourant()));
         holder.dateInit.setText(String.valueOf(listEmprunt.get(position).getDateDemande()));
         holder.dateFin.setText(String.valueOf(listEmprunt.get(position).getDateFin()));
