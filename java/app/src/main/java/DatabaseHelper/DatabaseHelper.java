@@ -212,7 +212,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_IDUSER, 1);
         values.put(KEY_IDPIECE, e.getPiece());
 
-        database.insertOrThrow(TABLE_PIECE, null, values);
+        database.insertOrThrow(TABLE_EMPRUNTPERSONNEL, null, values);
     }
 
 
