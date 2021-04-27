@@ -120,4 +120,28 @@ public class Piece {
     public void setCategorie(int categorie) {
         this.categorie = categorie;
     }
+
+    /**
+     * Pour convertir la liste id quantite du json
+     * @param id le id de la piece, int
+     * @param qty la quantite de la piece en inventaire, int
+     */
+    public void listeQty(int id, int qty){
+        this.id = id;
+        this.QTEDisponible = qty;
+    }
+
+    public void pieceComplete(){
+
+    }
 }
+/*
+return [
+            'id'=> $this->getId(),
+            'nom'=>$this->getNom(),
+            'description' => $this->getDescription(),
+            'QteDisponible' => (($this->getQteTotal()) - ($this->getQteEmprunter()) - ($this->getQteBrise()) - ($this->getQtePerdu())),
+            'idCategorie' => $idCat,
+            'nomCat' => $nomCat
+        ];
+ */
