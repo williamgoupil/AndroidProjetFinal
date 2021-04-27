@@ -7,6 +7,8 @@
  */
 package com.example.projetpiece;
 
+import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
+
+import DatabaseHelper.DatabaseHelper;
 import model.Piece;
 
 
@@ -52,8 +56,11 @@ public class AdapterInventaire extends RecyclerView.Adapter<AdapterInventaire.My
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
+        DatabaseHelper db = DatabaseHelper.getInstance(context);
+        String categorieName = db.getCategorieName(listPiece.get(position).getCategorie());
+
         holder.nom.setText(String.valueOf(listPiece.get(position).getNom()));
-        holder.categorie.setText(String.valueOf(listPiece.get(position).getCategorie()));
+        holder.categorie.setText(categorieName);
         holder.qte.setText(String.valueOf(listPiece.get(position).getQTEDisponible()));
 
     }
@@ -92,7 +99,12 @@ public class AdapterInventaire extends RecyclerView.Adapter<AdapterInventaire.My
             String item = String.valueOf(listPiece.get(piecePosition).getId());
 
             intent.putExtra("id", item);
+           // ((Activity ) context).startActivityForResult(intent, 0);
             context.startActivity(intent);
         }
     }
+
+
+
+
 }

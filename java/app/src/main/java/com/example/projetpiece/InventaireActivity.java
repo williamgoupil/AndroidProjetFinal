@@ -10,7 +10,12 @@ package com.example.projetpiece;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.List;
 import DatabaseHelper.DatabaseHelper;
@@ -41,11 +46,9 @@ public class InventaireActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.RVInventaire);
         listPiece = db.getInventairePositive();
 
-
         AdapterInventaire adapterInventaire = new AdapterInventaire(this,listPiece, recyclerView);
         recyclerView.setAdapter(adapterInventaire);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-
 
 }

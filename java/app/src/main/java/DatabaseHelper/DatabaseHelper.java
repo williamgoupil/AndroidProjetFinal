@@ -246,6 +246,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     /**
+     * Méthode pour retourner les informations d'une pièce avec un id
+     *
+     * @param id le id de la pièce
+     */
+    public Piece getOnePieceById(String id){
+
+
+        String query = "SELECT * FROM " + TABLE_PIECE + " WHERE " + KEY_ID + " = " + id;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+
+        if (c != null){
+            c.moveToFirst();
+
+            Piece p = new Piece();
+
+            p.setNom(c.getString(c.getColumnIndex(KEY_NOM)));
+            p.setDescription(c.getString(c.getColumnIndex(KEY_DESCRIPTION)));
+            p.setQTEDisponible(c.getInt(c.getColumnIndex(KEY_QTEDISPONIBLE)));
+
+            return  p;
+
+        }
+        return new Piece();
+    }
+
+
+    /**
      * Méthode pour retourner le nom d'une catégorie selon son id
      *
      * @param id le id de la categorie
@@ -257,6 +285,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
 
         if (c != null){
+            c.moveToFirst();
             return c.getString(c.getColumnIndex(KEY_NOM));
         }
             return  "";

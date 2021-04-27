@@ -5,4 +5,13 @@
     <string name="textDateDebut">Date Début : </string>
     <string name="textDateFin">Date fin : </string>
 
+
+    <string name="qteDesirer">Quantité désiré </string>
+    <string name="dateDeRetour">Choisir ça date de retour </string>
+    <string name="Reserver">Réserver la pièces </string>
+    <string name="Retourner">Retour </string>
+
+
+
+
 </resources>
