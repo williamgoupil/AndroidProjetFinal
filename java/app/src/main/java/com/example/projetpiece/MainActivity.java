@@ -62,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
         db = DatabaseHelper.getInstance(this);
 
 
-      //  db.addCategorie(c);
-      //  db.addPiece(p);
-      //  db.addEmprunt(e);
+       // db.addCategorie(c);
+       // db.addPiece(p);
+        //db.addEmprunt(e);
 
       //  db.addCategorie(c);
        // db.addPiece(p);

@@ -4,7 +4,15 @@
  * @version       : 1.0
  * Date          : 26/04/2021
  * @author      : Samuel Fournier
- */
+ *  Vérification :
+ *  Date           	Nom               	Approuvé
+ *  =========================================================
+ *
+ *  Historique de modifications :
+ *  Date           	Nom               	Description
+ *  =========================================================
+ *  26 Avril 2021   Samuel              Fait la création de l'adapter pour le RV ainsi que le Onclick Listener pour chaque item dans le RV
+ *  ****************************************/
 package com.example.projetpiece;
 
 import android.app.Activity;
@@ -35,6 +43,10 @@ public class AdapterInventaire extends RecyclerView.Adapter<AdapterInventaire.My
     final View.OnClickListener onClickListener = new MyOnClickListener();
 
 
+    /**
+     * Méthode qui remplis le layout et qui initialise le onclic listener pour le RecyclerView
+     *
+     */
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,6 +57,13 @@ public class AdapterInventaire extends RecyclerView.Adapter<AdapterInventaire.My
     }
 
 
+    /**
+     * Constructeur par défault
+     *
+     * @param context Le context pour le RV
+     * @param RVInventaire le RV en question
+     * @param listPiece la liste de pièces à afficher
+     */
     public AdapterInventaire(Context context, List<Piece> listPiece, RecyclerView RVInventaire){
 
         this.listPiece = listPiece;
@@ -53,6 +72,11 @@ public class AdapterInventaire extends RecyclerView.Adapter<AdapterInventaire.My
     }
 
 
+    /**
+     * Méthode qui permet de lier les champs avec les données du arraylist
+     *
+     * @param position La position dans le arraylist pour chaque Pièce
+     */
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
@@ -65,15 +89,23 @@ public class AdapterInventaire extends RecyclerView.Adapter<AdapterInventaire.My
 
     }
 
+    /**
+     * Méthode qui retourne le nombre d'item dans la liste
+     *
+     */
     @Override
     public int getItemCount(){return listPiece.size(); }
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView nom;
         TextView categorie;
         TextView qte;
 
-
+        /**
+         * Constructeur pour lier les champs au attribue
+         *
+         */
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -99,7 +131,6 @@ public class AdapterInventaire extends RecyclerView.Adapter<AdapterInventaire.My
             String item = String.valueOf(listPiece.get(piecePosition).getId());
 
             intent.putExtra("id", item);
-           // ((Activity ) context).startActivityForResult(intent, 0);
             context.startActivity(intent);
         }
     }

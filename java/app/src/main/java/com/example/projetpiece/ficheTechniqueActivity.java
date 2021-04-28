@@ -1,27 +1,39 @@
+/**
+ * Nom de classe : ficheTechniqueActivity
+ * Description   : Classe qui s'occupe de la logique pour le détails de chaque pièces ainsi que la réservation d'une pièce
+ * @version       : 1.0
+ * Date          : 28/04/2021
+ * @author      : Samuel Fournier
+ *  Vérification :
+ *  Date           	Nom               	Approuvé
+ *  =========================================================
+ *
+ *  Historique de modifications :
+ *  Date           	Nom               	Description
+ *  =========================================================
+ *  27 Avril 2021   Samuel              Fait l'ajout de initFiche et initAttribute et des méthodes pour que les boutons soit fonctionnels sur la view
+ *  27 Avril 2021   Samuel              Fait l'ajout des méthodes showDate et onDateSet pour afficher un calendrier lorsque le bouton choisir une date est affiché
+ *  27 Avril 2021   Samuel              Fait l'ajout de la fonction checkForm et sendForm pour envoyé les réservations et validé les champs du formulaire
+ *  27 Avril 2021   Samuel              Fait l'ajout du builder d'alert pour des meilleurs affiches de message d'erreur
+ *  28 Avril 2021   Samuel              Fait l'ajout d'un autre builder d'alert pour afficher un message de réussite lorsque la réservation se fait
+ *  ****************************************/
 package com.example.projetpiece;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
+
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,28 +45,42 @@ public class ficheTechniqueActivity extends AppCompatActivity implements DatePic
 
 
 
+    // Les champs à remplir avec les informations de chaque pièce
     private TextView nomPiece;
     private TextView descriptionPiece;
     private TextView qtePiece;
+
+    //Champs qui montre à l'utlisateur sa date choisie
     private TextView dateChoisirText;
 
+    //Champ pour la quantité désiré et le bouton pour choisir la date
     private EditText QTEDesirer;
     private Button DateRetour;
 
+    //Les boutons de contrôle
     private Button btnReserver;
     private Button btnRetour;
-    private Date dateChoisie;
 
+    //La date choisis et la date d'aujourd'hui
+    private Date dateChoisie;
     private Date todayDate;
 
+    // Le id de la pièce
     private String idPiece;
 
-
+    //instance de la database
     DatabaseHelper db;
 
+    //Les builder pour la création des alerts pour les erreurs et la réussite de la réservation
     private AlertDialog.Builder builder;
+    private AlertDialog.Builder finishBuilder;
 
 
+    /**
+     * Méthode qui fait la création de la page d'inventaire
+     *
+     * @param savedInstanceState Si on reçoit un bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,12 +114,20 @@ public class ficheTechniqueActivity extends AppCompatActivity implements DatePic
 
     }
 
+    /**
+     * Méthode qui appel l'initilisation des champs, des attributs  et des builders d'alerte
+     *
+     */
     private void init(){
         initAttributes();
         initFiche();
         initBuilder();
     }
 
+    /**
+     * Méthode qui appel l'initilisation des champs
+     *
+     */
     private void initFiche(){
         idPiece = getIntent().getExtras().getString("id");
         db = DatabaseHelper.getInstance(this);
@@ -103,6 +137,10 @@ public class ficheTechniqueActivity extends AppCompatActivity implements DatePic
         qtePiece.setText(String.valueOf(p.getQTEDisponible()));
     }
 
+    /**
+     * Méthode qui appel l'initilisation  des attributs
+     *
+     */
     private void initAttributes(){
         nomPiece = (TextView) findViewById(R.id.nomPieceDetaille);
         descriptionPiece = (TextView) findViewById(R.id.descriptionPieceDetaillé);
@@ -118,6 +156,10 @@ public class ficheTechniqueActivity extends AppCompatActivity implements DatePic
     }
 
 
+    /**
+     * Méthode qui appel l'initilisation  des builders d'alerte
+     *
+     */
     private void initBuilder(){
         builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
@@ -127,8 +169,24 @@ public class ficheTechniqueActivity extends AppCompatActivity implements DatePic
                 dialog.cancel();
             }
         });
+
+
+        finishBuilder = new AlertDialog.Builder(this);
+        finishBuilder.setCancelable(false);
+        finishBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+
     }
 
+    /**
+     * Méthode qui montre le calendrier pour que l'utilisateur choisises la date de retour
+     *
+     */
     private void showDate(){
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,this,
                 Calendar.getInstance().get(Calendar.YEAR),
@@ -138,6 +196,10 @@ public class ficheTechniqueActivity extends AppCompatActivity implements DatePic
         datePickerDialog.show();
     }
 
+    /**
+     * Méthode qui doit être override pour être le listener lorsque la date est choisi dans le calendrier
+     *
+     */
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
@@ -152,11 +214,19 @@ public class ficheTechniqueActivity extends AppCompatActivity implements DatePic
     }
 
 
+    /**
+     * Méthode qui retourner à la page d'inventaire
+     *
+     */
     private void returnButton(){
         finish();
     }
 
 
+    /**
+     * Méthode qui fait toutes les validations sur le formulaire pour réserver une pièces
+     *
+     */
     private void checkForm(){
         String qteDesirerString = QTEDesirer.getText().toString();
 
@@ -195,6 +265,10 @@ public class ficheTechniqueActivity extends AppCompatActivity implements DatePic
     }
 
 
+    /**
+     * Méthode qui envoie la Réservation à l'API et la place dans la BD local
+     *
+     */
     private void sendBooking(){
 
         Empruntpersonnel e = new Empruntpersonnel(Integer.parseInt(QTEDesirer.getText().toString()),todayDate,dateChoisie,"Envoyé, en attente",Integer.parseInt(idPiece),false);
@@ -210,11 +284,18 @@ public class ficheTechniqueActivity extends AppCompatActivity implements DatePic
         }
 
         db.addEmprunt(e);
-        finish();
+
+        showSuccessAlert("Votre Emprunt", "Vous pouvez maintenant suivre l'état de votre emprunt dans la section Mes emprunts ! ");
     }
 
 
 
+    /**
+     * Méthode qui montre la fenêtre d'alerte lorsqu'il à une erreur
+     *
+     * @param message le message à afficher dans la fenêtre d'Alerte
+     * @param title le titre de la fenêtre
+     */
     private void showAlert(String title, String message){
         builder.setMessage(message);
         AlertDialog alert = builder.create();
@@ -223,7 +304,26 @@ public class ficheTechniqueActivity extends AppCompatActivity implements DatePic
     }
 
 
+    /**
+     * Méthode qui montre la fenêtre d'alerte lorsque la réservation est terminer
+     *
+     * @param message le message à afficher dans la fenêtre d'Alerte
+     * @param title le titre de la fenêtre
+     */
+    private void showSuccessAlert(String title, String message){
+        finishBuilder.setMessage(message);
+        AlertDialog alert = finishBuilder.create();
+        alert.setTitle(title);
+        alert.show();
+    }
 
+
+
+
+    /**
+     * Méthode qui permet de savoir si il a une connexion à internet
+     *
+     */
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -4,7 +4,19 @@
  * @version       : 1.0
  * Date          : 26/04/2021
  * @author      : Samuel Fournier, Olivier Vigneault, Pier-Alexandre Caron, William Goupil
- */
+ *  Vérification :
+ *  Date           	Nom               	Approuvé
+ *  =========================================================
+ *
+ *  Historique de modifications :
+ *  Date           	Nom               	Description
+ *  =========================================================
+ *  26 Avril 2021   Samuel              Fait l'ajout des méthodes addCatégorie et Addpièces
+ *  26 Avril 2021   Samuel              Fait l'ajout de la méthodes getInventairePositive
+ *  27 Avril 2021   Samuel              Fait l'ajout des méthodes getOnePieceById, getCategorieName, updateQTE
+ *  28 Avril 2021   Samuel              Fait l'ajout des méthodes getInventairePositiveByCategorie, getAllCategorieName
+ *
+ *  ****************************************/
 package DatabaseHelper;
 
 import android.content.ContentValues;
@@ -248,6 +260,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     /**
+     * Méthode pour retourner la liste de tous les pièces qui ont une QTE disponible de plus de 0 filtrer par categorie
+     *
+     */
+    public List<Piece> getInventairePositiveByCategorie(String categorieName){
+        List<Piece> listPiece = new ArrayList<>();
+
+        String query = "SELECT p.id, p.nom, p.description ,p.QTEDisponible, p.categorie FROM " + TABLE_PIECE +
+                        " p INNER JOIN " +  TABLE_CATEGORIE + " c ON p." + KEY_IDCATEGORIE + " = c." + KEY_ID + " WHERE c." + KEY_NOM + " = '" + categorieName + "' AND " + KEY_QTEDISPONIBLE + " > 0";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            do {
+                int id = c.getInt(c.getColumnIndex(KEY_ID));
+                String nom = c.getString(c.getColumnIndex( KEY_NOM));
+                String desc = c.getString(c.getColumnIndex(KEY_DESCRIPTION));
+                int qte = c.getInt(c.getColumnIndex(KEY_QTEDISPONIBLE));
+                int categorie = c.getInt(c.getColumnIndex(KEY_IDCATEGORIE));
+                Piece p = new Piece(nom,desc,qte,categorie);
+                p.setId(id);
+                listPiece.add(p);
+            } while (c.moveToNext());
+        }
+
+        return listPiece;
+    }
+
+
+    /**
      * Méthode pour retourner les informations d'une pièce avec un id
      *
      * @param id le id de la pièce
@@ -293,7 +335,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return  "";
     }
 
+    /**
+     * Permet de remplir la list reçu en paramètre avec le nom de tous les catégories et la retourne
+     *
+     * @param listCategorie
+     */
+    public List<String> getAllCategorieName(List<String> listCategorie){
 
+
+        String query = "SELECT nom FROM " + TABLE_CATEGORIE;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            do {
+                String nom = c.getString(c.getColumnIndex(KEY_NOM));
+                listCategorie.add(nom);
+            } while (c.moveToNext());
+        }
+
+        return listCategorie;
+    }
+
+
+    /**
+     * Méthode qui permet de chaner la QTE d'une pièce
+     *
+     * @param id le id de la pièce à modifier
+     * @param newQTE la nouvelle qte pour la pièce
+     */
     public void updateQTE(String id, int newQTE){
         String query = "UPDATE " + TABLE_PIECE + " SET " + KEY_QTEDISPONIBLE + " = " + newQTE +  " WHERE " + KEY_ID + " = " + id;
         SQLiteDatabase database = this.getWritableDatabase();
@@ -310,7 +381,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         database.execSQL("DELETE FROM " + TABLE_CATEGORIE);
         database.execSQL("DELETE FROM " + TABLE_PIECE);
-        database.execSQL("DELETE FROM " + TABLE_EMPRUNTPERSONNEL);
+        //database.execSQL("DELETE FROM " + TABLE_EMPRUNTPERSONNEL);
     }
 
 
@@ -346,6 +417,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return listEmprunt;
     }
+
+
     public void deleteEmpruntById(int id) {
         SQLiteDatabase database = this.getWritableDatabase();
 

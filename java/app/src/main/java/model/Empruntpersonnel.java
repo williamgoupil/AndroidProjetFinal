@@ -27,6 +27,7 @@ public class Empruntpersonnel {
      * @param dateFin set la qte disponible pour une Piece
      * @param etatCourant set la categorie (id) pour une Piece
      * @param piece set la categorie (id) pour une Piece
+     * @param envoyer sert à savoir si l'emprunt à été envoyé à la BD officiel
      */
     public Empruntpersonnel(int QTEEmprunter, Date dateDemande, Date dateFin, String etatCourant, int piece, boolean envoyer){
         this.QTEEmprunter = QTEEmprunter;
@@ -146,10 +147,18 @@ public class Empruntpersonnel {
         this.piece = piece;
     }
 
+    /**
+     * Méthode qui retourne si l'emprunt est envoyé ou non, (False = pas envoyer, True = envoyé)
+     *
+     */
     public boolean isEnvoyer() {
         return envoyer;
     }
 
+    /**
+     * Méthode qui permet d'Attribue 0 ou 1 pour savoir si l'emprunt est envoyé
+     *
+     */
     public void setEnvoyer(boolean envoyer) {
         this.envoyer = envoyer;
     }
