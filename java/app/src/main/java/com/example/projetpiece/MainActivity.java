@@ -57,12 +57,19 @@ public class MainActivity extends AppCompatActivity {
         e.setEtatCourant("Emprunter");
         e.setDateDemande(d1);
         e.setDateFin(d1);
+        e.setEnvoyer(false);
 
         db = DatabaseHelper.getInstance(this);
 
-        db.addCategorie(c);
-        db.addPiece(p);
-        db.addEmprunt(e);
+
+      //  db.addCategorie(c);
+      //  db.addPiece(p);
+      //  db.addEmprunt(e);
+
+      //  db.addCategorie(c);
+       // db.addPiece(p);
+       // db.addEmprunt(e);
+
 
         Button buttonInventaire = (Button) findViewById(R.id.buttonInventaire);
         buttonInventaire.setOnClickListener(new View.OnClickListener() {
