@@ -71,7 +71,7 @@
             android:gravity="center"
             android:inputType="numberSigned"
             android:hint="@string/qteDesirer"
-            android:digits="123456789"
+            android:digits="0123456789"
             android:textColor="#000000" />
 
 

@@ -17,6 +17,7 @@ public class Empruntpersonnel {
     private Date dateFin;
     private String etatCourant;
     private int piece;
+    private boolean envoyer;
 
     /**
      * Constructeur avec paramètre pour Piece
@@ -27,12 +28,13 @@ public class Empruntpersonnel {
      * @param etatCourant set la categorie (id) pour une Piece
      * @param piece set la categorie (id) pour une Piece
      */
-    public Empruntpersonnel(int QTEEmprunter, Date dateDemande, Date dateFin, String etatCourant, int piece){
+    public Empruntpersonnel(int QTEEmprunter, Date dateDemande, Date dateFin, String etatCourant, int piece, boolean envoyer){
         this.QTEEmprunter = QTEEmprunter;
         this.dateDemande = dateDemande;
         this.dateFin = dateFin;
         this.etatCourant = etatCourant;
         this.piece = piece;
+        this.envoyer = envoyer;
     }
 
     /**
@@ -142,6 +144,14 @@ public class Empruntpersonnel {
      */
     public void setPiece(int piece) {
         this.piece = piece;
+    }
+
+    public boolean isEnvoyer() {
+        return envoyer;
+    }
+
+    public void setEnvoyer(boolean envoyer) {
+        this.envoyer = envoyer;
     }
 }
 

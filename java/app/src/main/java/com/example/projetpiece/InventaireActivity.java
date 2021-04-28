@@ -41,11 +41,29 @@ public class InventaireActivity extends AppCompatActivity {
         setTitle("Liste des pièces disponibles");
 
         db = DatabaseHelper.getInstance(this);
-
-
         recyclerView = (RecyclerView) findViewById(R.id.RVInventaire);
-        listPiece = db.getInventairePositive();
 
+
+
+        insertRV();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        insertRV();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        insertRV();
+    }
+
+    private void  insertRV(){
+        listPiece = db.getInventairePositive();
         AdapterInventaire adapterInventaire = new AdapterInventaire(this,listPiece, recyclerView);
         recyclerView.setAdapter(adapterInventaire);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

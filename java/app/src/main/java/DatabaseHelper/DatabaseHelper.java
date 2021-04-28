@@ -64,6 +64,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         private static final String KEY_IDUSER = "IdUtilisateur";
         private static final String KEY_ETATCOURANT = "etatCourant";
         private static final String KEY_IDPIECE = "piece";
+        private static final String KEY_ONLYLOCAL = "envoyer";
 
 
         private static final String CREATE_TABLE_PIECE = "CREATE TABLE " + TABLE_PIECE +
@@ -77,7 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         private static final String CREATE_TABLE_EMPRUNTPERSONNEL = "CREATE TABLE " + TABLE_EMPRUNTPERSONNEL +
                 "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_QTEEMPRUNTER + " INTEGER," + KEY_DATEDEMANDE + " INTEGER, " +
                 KEY_DATEFIN + " DATE, " + KEY_ETATCOURANT + " VARCHAR, " + KEY_IDUSER + " INTEGER," +
-                KEY_IDPIECE + " INTEGER, " +
+                KEY_IDPIECE + " INTEGER, " + KEY_ONLYLOCAL + " BOOLEAN, " +
                 "FOREIGN KEY (" + KEY_IDPIECE + ") REFERENCES " + TABLE_PIECE + " (" + KEY_ID + "))";
 
         private static final String CREATE_TABLE_BDVERSION = "CREATE TABLE " + TABLE_BDVERSION +
@@ -203,7 +204,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(KEY_QTEEMPRUNTER, e.getQTEEmprunter());
-        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
+        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-dd");
         String strDate = formatter.format(e.getDateDemande());
         values.put(KEY_DATEDEMANDE, strDate);
         strDate = formatter.format(e.getDateFin());
@@ -211,6 +212,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_ETATCOURANT, e.getEtatCourant());
         values.put(KEY_IDUSER, 1);
         values.put(KEY_IDPIECE, e.getPiece());
+        values.put(KEY_ONLYLOCAL, e.isEnvoyer());
 
         database.insertOrThrow(TABLE_EMPRUNTPERSONNEL, null, values);
     }
@@ -292,6 +294,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public void updateQTE(String id, int newQTE){
+        String query = "UPDATE " + TABLE_PIECE + " SET " + KEY_QTEDISPONIBLE + " = " + newQTE +  " WHERE " + KEY_ID + " = " + id;
+        SQLiteDatabase database = this.getWritableDatabase();
+        database.execSQL(query);
+    }
+
+
     /**
      * Méthode pour vider tous les tables
      *
@@ -329,7 +338,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
                 Date DateDebut = formatter.parse(StrDateDebut);
                 Date DateFin = formatter.parse(StrDateFin);
-                Empruntpersonnel E = new Empruntpersonnel (QTEEmprunter, DateDebut, DateFin, etat, piece);
+                Empruntpersonnel E = new Empruntpersonnel (QTEEmprunter, DateDebut, DateFin, etat, piece,false);
                 E.setId(id);
                 listEmprunt.add(E);
             } while (c.moveToNext());
