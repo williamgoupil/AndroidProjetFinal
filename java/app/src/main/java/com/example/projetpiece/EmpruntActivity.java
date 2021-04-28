@@ -43,7 +43,7 @@ public class EmpruntActivity extends AppCompatActivity {
         db = DatabaseHelper.getInstance(this);
 
 
-        recyclerView = (RecyclerView) findViewById(R.id.RVemprunt);
+        recyclerView = (RecyclerView) findViewById(R.id.RVEmprunt);
         try {
             listEmprunt = db.getListEmprunts();
         }
