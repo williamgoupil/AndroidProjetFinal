@@ -10,6 +10,7 @@ package com.example.projetpiece;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -54,6 +55,8 @@ public class EmpruntActivity extends AppCompatActivity {
         AdapterEmprunt adapterEmprunt = new AdapterEmprunt(this,listEmprunt, recyclerView);
         recyclerView.setAdapter(adapterEmprunt);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(adapterEmprunt));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
 

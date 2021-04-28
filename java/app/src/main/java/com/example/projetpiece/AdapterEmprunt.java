@@ -11,10 +11,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,7 +27,6 @@ import DatabaseHelper.DatabaseHelper;
 import model.Empruntpersonnel;
 import model.Piece;
 
-//TODO: Trouver pourquoi 1 seul item dans recycle view et trouver pourquoi date comme ça
 public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHolder>{
 
     private Context context;
@@ -35,7 +37,8 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
 
     final View.OnClickListener onClickListener = new MyOnClickListener();
     DatabaseHelper db;
-
+    Empruntpersonnel mRecentlyDeletedItem;
+    int mRecentlyDeletedItemPosition;
 
     @NonNull
     @Override
@@ -62,7 +65,7 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
         String nomPiece =  db.getOnePieceById(Integer.toString(IdPiece)).getNom();
         holder.nompiece.setText(nomPiece);
         holder.etat.setText(String.valueOf(listEmprunt.get(position).getEtatCourant()));
-        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
+        SimpleDateFormat formatter = new SimpleDateFormat("y-M-dd");
         String tempDate = formatter.format(listEmprunt.get(position).getDateDemande());
         holder.dateInit.setText(tempDate);
         tempDate = formatter.format(listEmprunt.get(position).getDateFin());
@@ -71,6 +74,16 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
 
     @Override
     public int getItemCount(){return listEmprunt.size(); }
+
+    public void deleteItem(int position) {
+         mRecentlyDeletedItem = listEmprunt.get(position);
+        mRecentlyDeletedItemPosition = position;
+        listEmprunt.remove(position);
+        notifyItemRemoved(position);
+        db = DatabaseHelper.getInstance(context);
+        db.deleteEmpruntById(mRecentlyDeletedItem.getId());
+    }
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView nompiece;

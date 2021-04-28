@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         p.setDescription("Ceci est un moteur electrique");
         p.setNom("Moteur Electrique");
         p.setQTEDisponible(5);
-        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
+        SimpleDateFormat formatter = new SimpleDateFormat("y-M-d");
 
         String StrDateDebut = new String("2020-04-27");
         Date d1 = null;

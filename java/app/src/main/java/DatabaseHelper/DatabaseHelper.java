@@ -337,4 +337,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return listEmprunt;
     }
+    public void deleteEmpruntById(int id) {
+        SQLiteDatabase database = this.getWritableDatabase();
+
+        database.execSQL("DELETE FROM "+TABLE_EMPRUNTPERSONNEL+" WHERE " + KEY_ID + " = " + id);
+    }
 }
