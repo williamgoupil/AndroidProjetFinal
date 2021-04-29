@@ -1,31 +1,25 @@
 package com.example.projetpiece;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Date;
+import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.util.concurrent.ExecutionException;
 
 import DatabaseHelper.DatabaseHelper;
-import model.Categorie;
-import model.Empruntpersonnel;
-import model.Piece;
 
-import static java.time.LocalDate.now;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
 
     private static final String LOG_TAG = "test";
@@ -117,5 +111,124 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        downloadDBInfo();
+    }
+
+    public void downloadDBInfo(){
+        if( checkBDVersion() == 0 ) {
+            downloadQuantity();
+        } else {
+            downloadFullBD();
+        }
+    }
+    public int checkBDVersion(){
+        String response="";
+
+        //NEED SQL QUERRY FOR CURRENT DB
+        String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-checkBDVersion/5";
+        try {
+            response = new webApiRequest().execute(urlCancel).get();
+
+            //Using the JSON simple library parse the string into a json object
+            JSONParser parse = new JSONParser();
+            JSONObject obj = (JSONObject) parse.parse(response);
+
+
+            return Integer.parseInt( obj.get("idVersion").toString());
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void downloadQuantity(){
+        String response="";
+
+        //NEED SQL QUERRY FOR CURRENT DB
+        String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-list";
+        try {
+            response = new webApiRequest().execute(urlCancel).get();
+
+            //Using the JSON simple library parse the string into a json object
+            JSONParser parse = new JSONParser();
+            JSONObject data_obj = (JSONObject) parse.parse(response);
+
+            JSONArray arr = (JSONArray) data_obj.get("lstPiece");
+
+            for (int i = 0; i < arr.size(); i++) {
+
+                JSONObject new_obj = (JSONObject) arr.get(i);
+                //Querry SQL pour insert les nouvelle quantités
+
+            }
+
+
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void downloadFullBD(){
+        String response="";
+
+        //NEED SQL QUERRY FOR CURRENT DB
+        String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-listeComplete";
+        try {
+            response = new webApiRequest().execute(urlCancel).get();
+
+            //Using the JSON simple library parse the string into a json object
+            JSONParser parse = new JSONParser();
+            JSONObject data_obj = (JSONObject) parse.parse(response);
+
+            JSONArray arr = (JSONArray) data_obj.get("lstPiece");
+
+            for (int i = 0; i < arr.size(); i++) {
+
+                JSONObject new_obj = (JSONObject) arr.get(i);
+                //Querry SQL pour insert la nouvelle DB
+
+            }
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 }
+/*
+//Test API P-A
+
+
+        String responsecode="";
+        try {
+            //URL pour cancel une certaine commande
+            String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-annuleremprunt/1";
+            responsecode = new webApiRequest().execute(urlCancel).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        Context context = getApplicationContext();
+        CharSequence text = responsecode;
+        int duration = Toast.LENGTH_LONG;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+
+ */
