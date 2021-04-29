@@ -6,34 +6,71 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="hello"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:gravity="center"
+        android:layout_marginHorizontal="40dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="30dp"
+            android:text="Se connecter" />
+
+        <TextView
+            android:id="@+id/txtErreur"
+            android:layout_width="match_parent"
+            android:layout_marginVertical="15dp"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/inputCourriel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:ems="10"
+            android:gravity="center_horizontal"
+            android:hint="Courriel"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/inputMDP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:ems="10"
+            android:gravity="center_horizontal"
+            android:hint="Mot de passe"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Se connecter" />
+
+        <Button
+            android:id="@+id/btnMDPoubli"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="mot de passe oublié?"
+            android:textColor="@android:color/tab_indicator_text" />
 
         <Button
             android:id="@+id/buttonInventaire"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Inventaire" />
+            android:text="inventaire" />
 
         <Button
-            android:id="@+id/buttonemprunt"
-            android:layout_width="wrap_content"
+            android:id="@+id/buttonEmprunt"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Emprunt" />
     </LinearLayout>

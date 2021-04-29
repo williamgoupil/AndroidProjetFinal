@@ -5,10 +5,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,48 +31,77 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "test";
     DatabaseHelper db;
 
+    TextView tvError;
+    EditText etCourriel, etMotDePasse;
+    Button btLogin, btOubliMDP;
+
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Categorie c = new Categorie();
-        c.setNom("MOTOR");
-        Piece p = new Piece();
-        p.setCategorie(1);
-        p.setDescription("Ceci est un moteur electrique");
-        p.setNom("Moteur Electrique");
-        p.setQTEDisponible(5);
-        SimpleDateFormat formatter = new SimpleDateFormat("y-M-d");
+        tvError = findViewById(R.id.txtErreur);
+        etCourriel = findViewById(R.id.inputCourriel);
+        etMotDePasse = findViewById(R.id.inputMDP);
+        btLogin = findViewById(R.id.btnLogin);
+        btOubliMDP = findViewById(R.id.btnMDPoubli);
 
-        String StrDateDebut = new String("2020-04-27");
-        Date d1 = null;
-        try {
-            d1 = formatter.parse(StrDateDebut);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        sessionManager = new SessionManager(getApplicationContext());
+
+        btLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String sCourriel = etCourriel.getText().toString().trim();
+                String sMotDePasse = etMotDePasse.getText().toString().trim();
+
+                if (sCourriel.equals("") || sMotDePasse.equals("")) {
+                    if (sCourriel.equals("")) {
+                        etCourriel.setError("Entrez l'adresse courriel");
+                    }
+                    if (sMotDePasse.equals("")) {
+                        etMotDePasse.setError("Entrez le mot de passe");
+                    }
+                }
+
+                //si l'api nous retourne vrai, c'est que le courriel et le mot de passe sont les bons e.g id = authenticate(sCourriel, sMotdePasse)
+                else if (sMotDePasse.equals("root")) {
+                    sessionManager.setLogin(true);
+                    sessionManager.setCourriel(sCourriel);
+                    boolean changePassword = true;
+
+                    if (changePassword) {
+                        startActivity(new Intent(getApplicationContext(), ChangePasswordActivity.class));
+                    } else {
+                        startActivity(new Intent(getApplicationContext(), AccueilActivity.class));
+                    }
+                    finish();
+                }
+                else {
+                    tvError.setTextColor(Color.parseColor("#FF0000"));
+                    tvError.setText("informations d'identifications invalides");
+                }
+            }
+        });
+
+        if (sessionManager.getLogin()) {
+            boolean changePassword = false;
+            if (changePassword) {
+                startActivity(new Intent(getApplicationContext(), ChangePasswordActivity.class));
+            } else {
+                startActivity(new Intent(getApplicationContext(), AccueilActivity.class));
+            }
+            finish();
         }
-        ;
-        Empruntpersonnel e = new Empruntpersonnel();
-        e.setPiece(1);
-        e.setQTEEmprunter(2);
-        e.setEtatCourant("Emprunter");
-        e.setDateDemande(d1);
-        e.setDateFin(d1);
-        e.setEnvoyer(false);
 
-        db = DatabaseHelper.getInstance(this);
-
-
-       // db.addCategorie(c);
-       // db.addPiece(p);
-        //db.addEmprunt(e);
-
-      //  db.addCategorie(c);
-       // db.addPiece(p);
-       // db.addEmprunt(e);
-
+        btOubliMDP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ResetPasswordActivity.class));
+                finish();
+            }
+        });
 
         Button buttonInventaire = (Button) findViewById(R.id.buttonInventaire);
         buttonInventaire.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Button buttonEmprunt = (Button) findViewById(R.id.buttonemprunt);
+        Button buttonEmprunt = (Button) findViewById(R.id.buttonEmprunt);
         buttonEmprunt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, EmpruntActivity.class);
@@ -86,5 +118,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }
