@@ -1,5 +1,6 @@
 package com.example.projetpiece;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -120,17 +122,30 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     public void downloadDBInfo(){
-        if( checkBDVersion() == 0 ) {
+        int responseCodeBD = checkBDVersion();
+        CharSequence text = "";
+        if( responseCodeBD == 0 ) {
             downloadQuantity();
+            text = "BD a jour";
         } else {
+            //insert le nouveaux Code de la BD
             downloadFullBD();
+            text = "BD mise a jour";
         }
+
+        Context context = getApplicationContext();
+
+        int duration = Toast.LENGTH_LONG;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
     }
     public int checkBDVersion(){
         String response="";
+        int responseCode=1;
 
         //NEED SQL QUERRY FOR CURRENT DB
-        String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-checkBDVersion/5";
+        String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-checkBDVersion/4";
         try {
             response = new webApiRequest().execute(urlCancel).get();
 
@@ -139,7 +154,7 @@ public class MainActivity extends AppCompatActivity  {
             JSONObject obj = (JSONObject) parse.parse(response);
 
 
-            return Integer.parseInt( obj.get("idVersion").toString());
+            responseCode =  Integer.parseInt( obj.get("idVersion").toString());
 
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -148,6 +163,10 @@ public class MainActivity extends AppCompatActivity  {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        finally {
+            return responseCode;
+        }
+
 
     }
     public void downloadQuantity(){
@@ -215,13 +234,16 @@ public class MainActivity extends AppCompatActivity  {
 }
 /*
 //Test API P-A
+    //Annule une commande aussi ^^
 
 
         String responsecode="";
         try {
             //URL pour cancel une certaine commande
-            String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-annuleremprunt/1";
-            responsecode = new webApiRequest().execute(urlCancel).get();
+            String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-annuleremprunt/{IdCommande}";
+            responsecode = new webApiRequest().execute(urlCancel).get();<
+            //1 pas réussi
+            //0 réussi
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

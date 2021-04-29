@@ -11,7 +11,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,14 +18,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import DatabaseHelper.DatabaseHelper;
-import model.Categorie;
 import model.Empruntpersonnel;
-import model.Piece;
 
 public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHolder>{
 
@@ -88,6 +89,34 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
         notifyItemRemoved(position);
         db = DatabaseHelper.getInstance(context);
         db.deleteEmpruntById(mRecentlyDeletedItem.getId());
+        String response="";
+        try {
+            //URL pour cancel une certaine commande
+            String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-annuleremprunt/{IdCommande}";
+            response = new webApiRequest().execute(urlCancel).get();
+
+            JSONParser parse = new JSONParser();
+            JSONObject data_obj = (JSONObject) parse.parse(response);
+
+            int responseCode = (int) data_obj.get("codeErreur");
+
+            //1 pas réussi
+            //0 réussi
+
+            if(responseCode == 1) {
+
+            }else if(responseCode == 0){
+
+            }
+
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showUndoSnackbar() {
