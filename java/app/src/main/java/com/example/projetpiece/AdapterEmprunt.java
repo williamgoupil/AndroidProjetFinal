@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 import DatabaseHelper.DatabaseHelper;
+import model.Categorie;
 import model.Empruntpersonnel;
 import model.Piece;
 
@@ -76,12 +77,25 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
     public int getItemCount(){return listEmprunt.size(); }
 
     public void deleteItem(int position) {
-         mRecentlyDeletedItem = listEmprunt.get(position);
+
+        mRecentlyDeletedItem = listEmprunt.get(position);
         mRecentlyDeletedItemPosition = position;
-        listEmprunt.remove(position);
-        notifyItemRemoved(position);
+
         db = DatabaseHelper.getInstance(context);
-        db.deleteEmpruntById(mRecentlyDeletedItem.getId());
+        Piece tempP =db.getOnePieceById(Integer.toString(mRecentlyDeletedItem.getId()));
+        String tempCat = db.getCategorieName(tempP.getCategorie());
+        if(!tempCat.equals("Emprunter"))
+        {
+            listEmprunt.remove(position);
+            notifyItemRemoved(position);
+
+            db.deleteEmpruntById(mRecentlyDeletedItem.getId());
+        }
+        else
+        {
+            int a = 1;
+            //TODO Ajouter message impossible delete commande emprunter
+        }
     }
 
 
