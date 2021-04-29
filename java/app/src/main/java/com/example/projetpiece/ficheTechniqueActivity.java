@@ -282,8 +282,9 @@ public class ficheTechniqueActivity extends AppCompatActivity implements DatePic
 
             //e.setEnvoyer(true);
         }
-
-        db.addEmprunt(e);
+        SessionManager sm = new SessionManager(getApplicationContext());
+        String UserEmail = sm.getCourriel();
+        db.addEmprunt(e,UserEmail);
 
         showSuccessAlert("Votre Emprunt", "Vous pouvez maintenant suivre l'état de votre emprunt dans la section Mes emprunts ! ");
     }

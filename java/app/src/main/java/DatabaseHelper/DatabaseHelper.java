@@ -19,6 +19,7 @@
  *  ****************************************/
 package DatabaseHelper;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -26,6 +27,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.example.projetpiece.SessionManager;
 
 import java.io.File;
 import java.text.ParseException;
@@ -210,19 +213,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @param e La reservation à insérer dans la BD
      */
-    public void addEmprunt(Empruntpersonnel e){
+    public void addEmprunt(Empruntpersonnel e,String userEmail){
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-
         values.put(KEY_QTEEMPRUNTER, e.getQTEEmprunter());
-        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String strDate = formatter.format(e.getDateDemande());
         values.put(KEY_DATEDEMANDE, strDate);
         strDate = formatter.format(e.getDateFin());
         values.put(KEY_DATEFIN, strDate);
         values.put(KEY_ETATCOURANT, e.getEtatCourant());
-        values.put(KEY_IDUSER, 1);
+        values.put(KEY_IDUSER, userEmail);
         values.put(KEY_IDPIECE, e.getPiece());
         values.put(KEY_ONLYLOCAL, e.isEnvoyer());
 
@@ -406,7 +408,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String StrDateFin = c.getString(c.getColumnIndex(KEY_DATEFIN));
                 String etat = c.getString(c.getColumnIndex(KEY_ETATCOURANT));
                 int piece = c.getInt(c.getColumnIndex(KEY_IDPIECE));
-                SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 Date DateDebut = formatter.parse(StrDateDebut);
                 Date DateFin = formatter.parse(StrDateFin);
                 Empruntpersonnel E = new Empruntpersonnel (QTEEmprunter, DateDebut, DateFin, etat, piece,false);

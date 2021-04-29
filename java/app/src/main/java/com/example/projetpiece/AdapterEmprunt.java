@@ -46,7 +46,9 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.rowemprunt,parent,false);
+
         view.setOnClickListener(onClickListener);
+
         return new MyViewHolder(view);
     }
 
@@ -64,13 +66,14 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
         db = DatabaseHelper.getInstance(context);
         int IdPiece = listEmprunt.get(position).getPiece();
         String nomPiece =  db.getOnePieceById(Integer.toString(IdPiece)).getNom();
+        SimpleDateFormat formatter = new SimpleDateFormat("y-M-dd");
+        String dateInit = formatter.format(listEmprunt.get(position).getDateDemande());
+        String dateFin = formatter.format(listEmprunt.get(position).getDateFin());
+
         holder.nompiece.setText(nomPiece);
         holder.etat.setText(String.valueOf(listEmprunt.get(position).getEtatCourant()));
-        SimpleDateFormat formatter = new SimpleDateFormat("y-M-dd");
-        String tempDate = formatter.format(listEmprunt.get(position).getDateDemande());
-        holder.dateInit.setText(tempDate);
-        tempDate = formatter.format(listEmprunt.get(position).getDateFin());
-        holder.dateFin.setText(tempDate);
+        holder.dateInit.setText(dateInit);
+        holder.dateFin.setText(dateFin);
     }
 
     @Override
@@ -81,23 +84,25 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
         mRecentlyDeletedItem = listEmprunt.get(position);
         mRecentlyDeletedItemPosition = position;
 
+        listEmprunt.remove(position);
+        notifyItemRemoved(position);
         db = DatabaseHelper.getInstance(context);
-        Piece tempP =db.getOnePieceById(Integer.toString(mRecentlyDeletedItem.getId()));
-        String tempCat = db.getCategorieName(tempP.getCategorie());
-        if(!tempCat.equals("Emprunter"))
-        {
-            listEmprunt.remove(position);
-            notifyItemRemoved(position);
-
-            db.deleteEmpruntById(mRecentlyDeletedItem.getId());
-        }
-        else
-        {
-            int a = 1;
-            //TODO Ajouter message impossible delete commande emprunter
-        }
+        db.deleteEmpruntById(mRecentlyDeletedItem.getId());
     }
 
+    private void showUndoSnackbar() {
+        View view = RVEmprunt;
+        Snackbar snackbar = Snackbar.make(view, R.string.snack_bar_text, Snackbar.LENGTH_LONG);
+
+        snackbar.setAction(R.string.snack_bar_text, v -> undoDelete());
+        snackbar.show();
+    }
+
+    private void undoDelete() {
+        listEmprunt.add(mRecentlyDeletedItemPosition,
+                mRecentlyDeletedItem);
+        notifyItemInserted(mRecentlyDeletedItemPosition);
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView nompiece;

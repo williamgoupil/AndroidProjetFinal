@@ -7,6 +7,7 @@
  */
 package com.example.projetpiece;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,10 +16,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import DatabaseHelper.DatabaseHelper;
+import model.Categorie;
 import model.Empruntpersonnel;
 import model.Piece;
 
@@ -40,7 +44,7 @@ public class EmpruntActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liste_emprunt);
         setTitle("Liste des emprunts");
-
+        addEmpruntDB();
         db = DatabaseHelper.getInstance(this);
 
 
@@ -59,5 +63,41 @@ public class EmpruntActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
+    /*
+        TO BE DELETED ONLY FOR TESTING
+         */
+    private void addEmpruntDB(){
 
+        Categorie c = new Categorie();
+        c.setNom("MOTOR");
+        Piece p = new Piece();
+        p.setCategorie(1);
+        p.setDescription("Ceci est un moteur electrique");
+        p.setNom("Moteur Electrique");
+        p.setQTEDisponible(5);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String StrDateDebut = new String("2020-04-27");
+        Date d1 = null;
+        try {
+            d1 = formatter.parse(StrDateDebut);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        ;
+        Empruntpersonnel e = new Empruntpersonnel();
+        e.setPiece(1);
+        e.setQTEEmprunter(2);
+        e.setEtatCourant("Emprunter");
+        e.setDateDemande(d1);
+        e.setDateFin(d1);
+        db = DatabaseHelper.getInstance(this);
+
+        db.addCategorie(c);
+        db.addPiece(p);
+        SessionManager sm = new SessionManager(getApplicationContext());
+        String UserEmail = sm.getCourriel();
+        db.addEmprunt(e,UserEmail);
+
+
+    }
 }

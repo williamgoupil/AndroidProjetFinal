@@ -44,6 +44,9 @@ public class MainActivity extends AppCompatActivity  {
 
         sessionManager = new SessionManager(getApplicationContext());
 
+
+
+
         btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +110,7 @@ public class MainActivity extends AppCompatActivity  {
         Button buttonEmprunt = (Button) findViewById(R.id.buttonEmprunt);
         buttonEmprunt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 Intent intent = new Intent(MainActivity.this, EmpruntActivity.class);
                 startActivity(intent);
             }
