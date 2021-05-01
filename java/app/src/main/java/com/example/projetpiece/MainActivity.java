@@ -3,6 +3,8 @@ package com.example.projetpiece;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,10 +24,14 @@ import java.util.concurrent.ExecutionException;
 
 import DatabaseHelper.*;
 
+import DatabaseHelper.DatabaseHelper;
+
+
 public class MainActivity extends AppCompatActivity  {
 
 
     private static final String LOG_TAG = "test";
+    private static final String CHANNEL_ID = "Gestionnaire_Piece_channel";
     DatabaseHelper db;
     Requests requests;
 
@@ -37,6 +43,10 @@ public class MainActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //Pour l'utilisation d'une notification doit etre appellé au debut
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         requests = new Requests();
@@ -119,9 +129,54 @@ public class MainActivity extends AppCompatActivity  {
                 startActivity(intent);
             }
         });
+        bootload();
 
         Requests request = new Requests();
 
         request.downloadDBInfo();
     }
+
+
+    public void bootload(){
+        downloadDBInfo();
+
+        webRequest webRequest = new webRequest();
+
+        if(isNetworkAvailable()) {
+            //querry pour trouver les commandes pas send
+            //send them
+        }
+
     }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null;
+    }
+    public void downloadDBInfo(){
+
+        webRequest webRequest = new webRequest();
+        int responseCodeBD = webRequest.checkBDVersion();
+        CharSequence text = "";
+        if( responseCodeBD == 0 ) {
+            webRequest.downloadQuantity();
+            text = "BD a jour";
+        } else {
+            //insert le nouveaux Code de la BD
+            webRequest.downloadFullBD();
+            text = "BD mise a jour";
+        }
+
+        Context context = getApplicationContext();
+
+        int duration = Toast.LENGTH_LONG;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+    }
+
+
+
+}
+
