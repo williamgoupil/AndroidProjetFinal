@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     public void downloadDBInfo(){
+
         int responseCodeBD = checkBDVersion();
         CharSequence text = "";
         if( responseCodeBD == 0 ) {

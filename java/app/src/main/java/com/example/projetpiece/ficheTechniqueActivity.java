@@ -19,9 +19,6 @@
  *  ****************************************/
 package com.example.projetpiece;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -34,9 +31,13 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
 import DatabaseHelper.DatabaseHelper;
 import model.Empruntpersonnel;
 import model.Piece;
@@ -279,6 +280,11 @@ public class ficheTechniqueActivity extends AppCompatActivity implements DatePic
         if(isNetworkAvailable()){
             //Fonction à PA pour envoyer avec l'API
 
+            webRequest requestEmprunt = new webRequest();
+
+            //la fonction est pas fini sur la partie web mais ceci devrais marcher
+            //retour est un int ( durée en jour de location )
+            //idEmprunt = requestEmprunt.makeReservation(int idPiece, int qqtPiece, int idUser, int retour);
 
             //e.setEnvoyer(true);
         }
