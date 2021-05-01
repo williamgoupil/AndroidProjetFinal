@@ -10,16 +10,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 public class ChangePasswordActivity extends AppCompatActivity {
 
     TextView tvError;
     EditText etMotDePasse, etMotDePasseConfirmation;
     Button btConfirmer;
+    Requests requests;
+
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+
+        sessionManager = new SessionManager(getApplicationContext());
+
+        requests = new Requests();
 
         tvError = findViewById(R.id.txtErreurChangeMDP);
         etMotDePasse = findViewById(R.id.etChangeMDP);
@@ -45,9 +54,17 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     tvError.setTextColor(Color.parseColor("#FF0000"));
                     tvError.setText("Les mots de passes doivent être identiques!");
                 }
-
-                else {
-                    startActivity(new Intent(getApplicationContext(), AccueilActivity.class));
+                else
+                {
+                    HashMap<String, String> data = requests.verifyPassword(sessionManager.getCourriel(), sMotDePasse);
+                    if ((data.get("samePassword")).equals("true")) {
+                        tvError.setTextColor(Color.parseColor("#FF0000"));
+                        tvError.setText("Le mot de passe doit être différent du mot de passe précédent!");
+                    }
+                    else {
+                        requests.changePassword(sessionManager.getCourriel(), sMotDePasse);
+                        startActivity(new Intent(getApplicationContext(), AccueilActivity.class));
+                    }
                 }
             }
         });

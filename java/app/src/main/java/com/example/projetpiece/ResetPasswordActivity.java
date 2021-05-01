@@ -2,6 +2,7 @@ package com.example.projetpiece;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -9,11 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 public class ResetPasswordActivity extends AppCompatActivity {
 
     EditText etCourriel;
     Button btEnvoyer;
     TextView tvError;
+    Requests requests;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,15 +28,21 @@ public class ResetPasswordActivity extends AppCompatActivity {
         btEnvoyer = findViewById(R.id.btnEnvoyer);
         tvError = findViewById(R.id.textView5);
 
+        requests = new Requests();
+
         btEnvoyer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String sCourriel = etCourriel.getText().toString().trim();
-                boolean wrongEmail = false;
-                //verifier si adresse courriel est associer a un compte avec methode de l'api
-                if (wrongEmail) {
+                HashMap<String, String> data = requests.isEmailUsed(sCourriel);
+
+                if ((data.get("emailUsed")).equals("false")) {
                     tvError.setTextColor(Color.parseColor("#FF0000"));
-                    tvError.setText("aucun compte associé à cette adresse!");
+                    tvError.setText("Aucun compte associé à cette adresse courriel!");
+                }
+                else if ((data.get("emailUsed")).equals("true")) {
+                    requests.resetPassword(sCourriel);
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }
             }
         });

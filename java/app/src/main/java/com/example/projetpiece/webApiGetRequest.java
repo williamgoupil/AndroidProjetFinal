@@ -6,7 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
-public class webApiRequest extends AsyncTask<String, Void, String> {
+public class webApiGetRequest extends AsyncTask<String, Void, String> {
 
 
 
