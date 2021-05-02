@@ -290,6 +290,7 @@ public class Requests {
 
         return empruntState;
     }
+
     public String downloadCat(){
         String urlcat = "https://bc9f74bc64d0.ngrok.io/api-mobile-getCategories";
         String response = "";
@@ -307,7 +308,23 @@ public class Requests {
         return "";
     }
 
-    public void checkCommandState(int idCommande){
+    public String downloadEmprunt(int idUser){
+        String urlEmprunt = "https://bc9f74bc64d0.ngrok.io/api-mobile-getCategories";
+        String response = "";
 
+
+        try {
+            return response = new webApiGetRequest().execute(urlEmprunt).get();
+
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
+
+
+
 }

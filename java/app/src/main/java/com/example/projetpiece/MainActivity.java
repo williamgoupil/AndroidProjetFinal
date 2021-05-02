@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity  {
         });
 
 
-        bootload();
+      // bootload();
     }
 
 
@@ -138,7 +138,10 @@ public class MainActivity extends AppCompatActivity  {
             db.loadquantity(requests.downloadQuantity());
             text = "BD a jour";
         } else {
+
+            db.checkUnsent();
             db.trunctateALL();
+
             db.newBDVersion(responseCodeBD);
             db.loadNewCat(requests.downloadCat());
             db.loadNewInventory(requests.downloadFullBD());

@@ -380,8 +380,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void trunctateALL(){
         SQLiteDatabase database = this.getWritableDatabase();
 
-        database.execSQL("DELETE FROM " + TABLE_CATEGORIE);
-        database.execSQL("DELETE FROM " + TABLE_PIECE);
+        //database.execSQL("DELETE FROM " + TABLE_PIECE);
+        //database.execSQL("DELETE FROM " + TABLE_CATEGORIE);
         //database.execSQL("DELETE FROM " + TABLE_EMPRUNTPERSONNEL);
     }
 
@@ -562,5 +562,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
 
+    }
+
+
+    public void loadEmprunt(String emprunt, String idUser){
+        try {
+
+            JSONParser parse = new JSONParser();
+
+
+            JSONObject data_obj = (JSONObject) parse.parse(emprunt);
+
+            JSONArray arr = (JSONArray) data_obj.get("lstemprunts");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+            for (int i = 0; i < arr.size(); i++) {
+
+                JSONObject new_obj = (JSONObject) arr.get(i);
+
+
+                Date DateDebut = formatter.parse(new_obj.get("dateDebut").toString());
+                Date DateFin = formatter.parse(new_obj.get("dateFin").toString());
+
+                Empruntpersonnel e = new Empruntpersonnel(
+                        Integer.parseInt(new_obj.get("qteEmprunter").toString()),
+                        DateDebut,
+                        DateFin,
+                        new_obj.get("etat").toString(),
+                        Integer.parseInt(new_obj.get("idPiece").toString()),
+                        true);
+
+               addEmprunt(e, idUser);
+
+            }
+
+        }catch (org.json.simple.parser.ParseException e) {
+            e.printStackTrace();
+        }
     }
 }
