@@ -1,14 +1,10 @@
 package com.example.projetpiece;
 
-import android.content.Context;
-import android.widget.Toast;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
@@ -21,7 +17,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://ab1ae7403f39.ngrok.io/api-mobile-authenticate");
+        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-authenticate");
         params.put("email", courriel);
         params.put("password", password);
 
@@ -55,7 +51,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://ab1ae7403f39.ngrok.io/api-mobile-emailUsed");
+        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-emailUsed");
         params.put("email", sCourriel);
 
         try {
@@ -83,7 +79,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://ab1ae7403f39.ngrok.io/api-mobile-passwordStatus");
+        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-passwordStatus");
         params.put("email", courriel);
 
         try {
@@ -111,7 +107,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://ab1ae7403f39.ngrok.io/api-mobile-verifyPassword");
+        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-verifyPassword");
         params.put("email", courriel);
         params.put("password", password);
 
@@ -140,7 +136,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://ab1ae7403f39.ngrok.io/api-mobile-new-password");
+        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-new-password");
         params.put("email", courriel);
         params.put("password", password);
 
@@ -165,7 +161,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://ab1ae7403f39.ngrok.io/api-mobile-resetPassword");
+        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-resetPassword");
         params.put("email", courriel);
 
         try {
