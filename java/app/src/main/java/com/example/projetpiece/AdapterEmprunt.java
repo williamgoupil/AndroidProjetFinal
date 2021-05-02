@@ -1,10 +1,20 @@
 /**
- * Nom de classe : AdapterInventaire
- * Description   : Classe qui s'occupe de de remplir le recycler view avec les informations des pièces
+ * Nom de classe : AdapterActivity
+ * Description   : Classe qui s'occupe de remplir le recycler view avec les informations des Emprunts
  * @version       : 1.0
- * Date          : 26/04/2021
- * @author      : Samuel Fournier
- */
+ * Date          : 27/04/2021
+ * @author      : William Goupil
+ *  Vérification :
+ *  Date           	Nom               	Approuvé
+ *  =========================================================
+ *
+ *  Historique de modifications :
+ *  Date           	Nom               	Description
+ *  =========================================================
+ *  27 Avril 2021   William              Fait l'ajout des méthodes pour rendre la classe fonctionnel
+ *  28 Avril 2021   William              Fait l'ajout des méthodes pour rendre fonctionnel le SwipeToDelete
+ *  29 Avril 2021   William              Ajustement du SwipeToDelete
+ *  ****************************************/
 package com.example.projetpiece;
 
 import android.content.Context;

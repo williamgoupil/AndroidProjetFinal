@@ -1,3 +1,18 @@
+/**
+ * Nom de classe : SwipeToDeleteCallback
+ * Description   : Classe qui s'occupe de supprimer un recycler view
+ * @version       : 1.0
+ * Date          : 28/04/2021
+ * @author      : William Goupil
+ *  Vérification :
+ *  Date           	Nom               	Approuvé
+ *  =========================================================
+ *
+ *  Historique de modifications :
+ *  Date           	Nom               	Description
+ *  =========================================================
+ *  28 Avril 2021   William              Fait l'ajout de initFiche et initAttribute et des méthodes pour que les boutons soit fonctionnels sur la view
+ *  ****************************************/
 package com.example.projetpiece;
 
 import android.graphics.Canvas;

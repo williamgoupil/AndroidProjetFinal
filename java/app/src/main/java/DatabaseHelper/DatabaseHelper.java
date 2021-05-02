@@ -13,8 +13,11 @@
  *  =========================================================
  *  26 Avril 2021   Samuel              Fait l'ajout des méthodes addCatégorie et Addpièces
  *  26 Avril 2021   Samuel              Fait l'ajout de la méthodes getInventairePositive
+ *  27 Avril 2021   William             Fait l'ajout de la méthodes getListEmprunts
+ *  27 Avril 2021   William             Fait l'ajout de la méthodes addEmprunt
  *  27 Avril 2021   Samuel              Fait l'ajout des méthodes getOnePieceById, getCategorieName, updateQTE
  *  28 Avril 2021   Samuel              Fait l'ajout des méthodes getInventairePositiveByCategorie, getAllCategorieName
+ *  28 Avril 2021   William             Fait l'ajout de la méthodes deleteEmpruntById
  *
  *  ****************************************/
 package DatabaseHelper;

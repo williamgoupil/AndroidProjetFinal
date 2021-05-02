@@ -1,10 +1,20 @@
 /**
- * Nom de classe : InventaireActivity
+ * Nom de classe : Emprunt Activity
  * Description   : Classe qui s'occupe de la logique pour la fenêtre de l'inventaire
  * @version       : 1.0
  * Date          : 26/04/2021
- * @author      : Samuel Fournier
- */
+ * @author      : William Goupil
+ *  Vérification :
+ *  Date           	Nom               	Approuvé
+ *  =========================================================
+ *
+ *  Historique de modifications :
+ *  Date           	Nom               	Description
+ *  =========================================================
+ *  27 Avril 2021   William              Fait l'ajout des méthodes pour rendre la classe fonctionne
+ *  28 Avril 2021   William              Fait l'ajout des méthodes pour rendre fonctionnel le SwipeToDelete
+ *  ****************************************/
+
 package com.example.projetpiece;
 
 import android.annotation.SuppressLint;
