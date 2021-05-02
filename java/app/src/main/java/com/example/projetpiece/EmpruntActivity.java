@@ -44,7 +44,7 @@ public class EmpruntActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liste_emprunt);
         setTitle("Liste des emprunts");
-        addEmpruntDB();
+        //addEmpruntDB();
         db = DatabaseHelper.getInstance(this);
 
 

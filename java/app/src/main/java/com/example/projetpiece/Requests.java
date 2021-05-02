@@ -306,4 +306,8 @@ public class Requests {
         }
         return "";
     }
+
+    public void checkCommandState(int idCommande){
+
+    }
 }
