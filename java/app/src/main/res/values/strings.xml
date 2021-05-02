@@ -12,6 +12,8 @@
     <string name="Retourner">Retour </string>
     <string name="filtrer">Filtrer : </string>
     <string name="snack_bar_text">Impossible dannuler cette emprunt.</string>
+    <string name="channel_name">channel_gestionnaire_piece</string>
+    <string name="channel_description">Channel de notification du getsionnaire de piece</string>
 
 
 </resources>

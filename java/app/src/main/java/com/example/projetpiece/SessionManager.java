@@ -31,5 +31,15 @@ public class SessionManager {
     public String getCourriel() {
         return sharedPreferences.getString("KEY_COURRIEL", "");
     }
+
+    public void setID(String id) {
+        editor.putString("KEY_ID", id);
+        editor.commit();
+    }
+
+    public String getID() {
+        return sharedPreferences.getString("KEY_ID", "0");
+    }
+
 }
 

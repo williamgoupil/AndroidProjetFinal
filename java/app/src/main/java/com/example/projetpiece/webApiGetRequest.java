@@ -6,7 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
-public class webApiRequest extends AsyncTask<String, Void, String> {
+public class webApiGetRequest extends AsyncTask<String, Void, String> {
 
 
 
@@ -15,17 +15,11 @@ public class webApiRequest extends AsyncTask<String, Void, String> {
             try {
 
                 URL url = new URL(urls[0]);
-
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
                 conn.setRequestMethod("GET");
-
                 conn.connect();
-
                 //Getting the response code
                 int responsecode = conn.getResponseCode();
-
-
 
                 if (responsecode != 200) {
 
@@ -39,18 +33,14 @@ public class webApiRequest extends AsyncTask<String, Void, String> {
                     while (scanner.hasNext()) {
                         inline += scanner.nextLine();
                     }
-
                     //Close the scanner
                     scanner.close();
-
                     return inline;
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
-
                 return e.toString();
-
             }
         }
 
