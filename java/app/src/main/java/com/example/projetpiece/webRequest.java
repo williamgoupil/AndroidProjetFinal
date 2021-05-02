@@ -17,7 +17,7 @@ public class webRequest {
         //Il faut faire un concatenate pour avoir le bon URL
         String urlReservation = "https://d11d840bcd81.ngrok.io/api-mobile-annuleremprunt//api-mobile-reserverPieces/{idPiece}/{qqtPiece}/{idUser}/{retour}";
         try {
-            response = new webApiRequest().execute(urlReservation).get();
+            response = new webApiGetRequest().execute(urlReservation).get();
 
             JSONParser parse = new JSONParser();
             JSONObject obj = (JSONObject) parse.parse(response);
@@ -43,7 +43,7 @@ public class webRequest {
         //NEED SQL QUERRY FOR CURRENT DB
         String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-checkBDVersion/4";
         try {
-            response = new webApiRequest().execute(urlCancel).get();
+            response = new webApiGetRequest().execute(urlCancel).get();
 
             //Using the JSON simple library parse the string into a json object
             JSONParser parse = new JSONParser();
@@ -71,7 +71,7 @@ public class webRequest {
         //NEED SQL QUERRY FOR CURRENT DB
         String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-list";
         try {
-            response = new webApiRequest().execute(urlCancel).get();
+            response = new webApiGetRequest().execute(urlCancel).get();
 
             //Using the JSON simple library parse the string into a json object
             JSONParser parse = new JSONParser();
@@ -103,7 +103,7 @@ public class webRequest {
         //NEED SQL QUERRY FOR CURRENT DB
         String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-listeComplete";
         try {
-            response = new webApiRequest().execute(urlCancel).get();
+            response = new webApiGetRequest().execute(urlCancel).get();
 
             //Using the JSON simple library parse the string into a json object
             JSONParser parse = new JSONParser();
@@ -133,7 +133,7 @@ public class webRequest {
         String urlState = "https://d11d840bcd81.ngrok.io/api-mobile-listeComplete";
 
         try {
-            response = new webApiRequest().execute(urlState).get();
+            response = new webApiGetRequest().execute(urlState).get();
             JSONParser parse = new JSONParser();
             JSONObject obj = (JSONObject) parse.parse(response);
 
