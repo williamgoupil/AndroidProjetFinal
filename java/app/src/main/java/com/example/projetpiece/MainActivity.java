@@ -14,15 +14,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
-
-import DatabaseHelper.*;
 
 import DatabaseHelper.DatabaseHelper;
 
@@ -119,9 +111,11 @@ public class MainActivity extends AppCompatActivity  {
 
 
     public void bootload(){
-        downloadDBInfo();
+
+        db = DatabaseHelper.getInstance(this);
 
         if(isNetworkAvailable()) {
+            downloadDBInfo();
             //querry pour trouver les commandes pas send
             //send them
         }
@@ -134,14 +128,20 @@ public class MainActivity extends AppCompatActivity  {
         return activeNetworkInfo != null;
     }
     public void downloadDBInfo(){
-        int responseCodeBD = requests.checkBDVersion();
+
+        db = DatabaseHelper.getInstance(this);
+
+
+        int responseCodeBD = requests.checkBDVersion(db.getcurrentDBVersion());
         CharSequence text = "";
         if( responseCodeBD == 0 ) {
-            requests.downloadQuantity();
+            db.loadquantity(requests.downloadQuantity());
             text = "BD a jour";
         } else {
-            //insert le nouveaux Code de la BD
-            requests.downloadFullBD();
+            db.trunctateALL();
+            db.newBDVersion(responseCodeBD);
+            db.loadNewCat(requests.downloadCat());
+            db.loadNewInventory(requests.downloadFullBD());
             text = "BD mise a jour";
         }
 

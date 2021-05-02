@@ -24,11 +24,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
-import com.example.projetpiece.SessionManager;
+import com.example.projetpiece.Requests;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import java.io.File;
 import java.text.ParseException;
@@ -36,15 +38,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
-
+import model.BDVersion;
 import model.Categorie;
 import model.Empruntpersonnel;
 import model.Piece;
-
-import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -213,7 +212,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @param e La reservation à insérer dans la BD
      */
-    public void addEmprunt(Empruntpersonnel e,String userEmail){
+    public void addEmprunt(Empruntpersonnel e,String userId){
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -224,7 +223,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         strDate = formatter.format(e.getDateFin());
         values.put(KEY_DATEFIN, strDate);
         values.put(KEY_ETATCOURANT, e.getEtatCourant());
-        values.put(KEY_IDUSER, userEmail);
+        values.put(KEY_IDUSER, userId);
         values.put(KEY_IDPIECE, e.getPiece());
         values.put(KEY_ONLYLOCAL, e.isEnvoyer());
 
@@ -428,5 +427,140 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
 
         database.execSQL("DELETE FROM "+TABLE_EMPRUNTPERSONNEL+" WHERE " + KEY_ID + " = " + id);
+    }
+
+    public int getcurrentDBVersion(){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        String querry = ("SELECT " +  KEY_ID +  " FROM " +TABLE_BDVERSION + " ORDER BY " + KEY_ID + " DESC");
+        Cursor c = db.rawQuery(querry,null);
+        if(c.moveToFirst()){
+            return c.getInt(c.getColumnIndex(KEY_ID));
+        }
+        return 0;
+    }
+    public void loadquantity(String inventory){
+        try {
+
+
+            //Using the JSON simple library parse the string into a json object
+            JSONParser parse = new JSONParser();
+            JSONObject data_obj = (JSONObject) parse.parse(inventory);
+
+            JSONArray arr = (JSONArray) data_obj.get("lstPiece");
+
+            for (int i = 0; i < arr.size(); i++) {
+
+                JSONObject new_obj = (JSONObject) arr.get(i);
+                updateQTE(new_obj.get("id").toString(),Integer.parseInt(new_obj.get("qqt").toString()));
+
+            }
+
+        } catch (org.json.simple.parser.ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void loadNewInventory(String newInventory){
+        try {
+
+
+            //Using the JSON simple library parse the string into a json object
+            JSONParser parse = new JSONParser();
+            JSONObject data_obj = (JSONObject) parse.parse(newInventory);
+
+            JSONArray arr = (JSONArray) data_obj.get("lstPiece");
+
+
+            for (int i = 0; i < arr.size(); i++) {
+
+                JSONObject new_obj = (JSONObject) arr.get(i);
+
+                Piece piece = new Piece(new_obj.get("nom").toString(),new_obj.get("description").toString(),Integer.parseInt(new_obj.get("QteDisponible").toString() ),Integer.parseInt(new_obj.get("idCategorie").toString()));
+                piece.setId(Integer.parseInt(new_obj.get("id").toString()));
+                addPiece(piece);
+
+            }
+
+        } catch (org.json.simple.parser.ParseException e) {
+            e.printStackTrace();
+        }
+    }
+    public void loadNewCat(String allCat){
+        try {
+
+            JSONParser parse = new JSONParser();
+
+
+            JSONObject data_obj = (JSONObject) parse.parse(allCat);
+
+            JSONArray arr = (JSONArray) data_obj.get("lstcat");
+
+
+            for (int i = 0; i < arr.size(); i++) {
+
+                JSONObject new_obj = (JSONObject) arr.get(i);
+
+                Categorie cat = new Categorie(new_obj.get("nom").toString());
+                cat.setId(Integer.parseInt(new_obj.get("id").toString()));
+                addCategorie(cat);
+
+            }
+
+        }catch (org.json.simple.parser.ParseException e) {
+            e.printStackTrace();
+        }
+    }
+    public void newBDVersion(int bdVersion){
+        BDVersion bdVers = new BDVersion();
+
+        SQLiteDatabase database = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        bdVers.setId(bdVersion);
+        values.put(KEY_ID, bdVers.getId());
+
+        database.insertOrThrow(TABLE_BDVERSION, null, values);
+
+    }
+    public void checkUnsent(){
+        Requests request = new Requests();
+        List<Empruntpersonnel> listEmprunt = new ArrayList<>();
+
+        String query = "SELECT * FROM " + TABLE_EMPRUNTPERSONNEL + " WHERE " + KEY_ONLYLOCAL + " = 0";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            do {
+                String StrDateDebut = c.getString(c.getColumnIndex(KEY_DATEDEMANDE));
+                String StrDateFin = c.getString(c.getColumnIndex(KEY_DATEFIN));
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                long diffInMillies;
+                long diffinDays=0;
+                try {
+                    Date DateDebut = formatter.parse(StrDateDebut);
+                    Date DateFin = formatter.parse(StrDateFin);
+                    diffInMillies = Math.abs(DateFin.getTime() - DateDebut.getTime());
+                    diffinDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                int idEmprunt = request.makeReservation(c.getInt(c.getColumnIndex(KEY_IDPIECE)),c.getInt(c.getColumnIndex(KEY_QTEEMPRUNTER)),c.getInt(c.getColumnIndex(KEY_IDUSER)),(int)diffinDays);
+
+                String queryUpdateID = "UPDATE " + TABLE_EMPRUNTPERSONNEL + " SET " + KEY_ID + " = " + idEmprunt +  " WHERE " + KEY_ID + " = " + c.getInt(c.getColumnIndex(KEY_ID));
+                String queryUpdateSentState = "UPDATE " + TABLE_EMPRUNTPERSONNEL + " SET " + KEY_ONLYLOCAL + " = " + 1 +  " WHERE " + KEY_ID + " = " + idEmprunt;
+                SQLiteDatabase database = this.getWritableDatabase();
+                database.execSQL(queryUpdateID);
+                database.execSQL(queryUpdateSentState);
+
+            } while (c.moveToNext());
+        }
+
+
     }
 }
