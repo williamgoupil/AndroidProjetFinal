@@ -92,7 +92,7 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
         try {
             //URL pour cancel une certaine commande
             String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-annuleremprunt/" + mRecentlyDeletedItem.getId();
-            response = new webApiRequest().execute(urlCancel).get();
+            response = new webApiGetRequest().execute(urlCancel).get();
 
             JSONParser parse = new JSONParser();
             JSONObject data_obj = (JSONObject) parse.parse(response);
