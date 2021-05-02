@@ -37,6 +37,7 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
 
     private RecyclerView RVEmprunt;
 
+
     final View.OnClickListener onClickListener = new MyOnClickListener();
     DatabaseHelper db;
     Empruntpersonnel mRecentlyDeletedItem;

@@ -1,6 +1,5 @@
 package com.example.projetpiece;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -9,6 +8,8 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 public class Requests {
+
+
 
     public HashMap<String, String> authenticateUser(String courriel, String password) {
         HashMap<String, String> params = new HashMap<>();
@@ -206,12 +207,12 @@ public class Requests {
 
         return idReservation;
     }
-    public int checkBDVersion(){
+    public int checkBDVersion(int currentbdversion){
         String response="";
         int responseCode=1;
 
-        //NEED SQL QUERRY FOR CURRENT DB
-        String urlCancel = "https://bc9f74bc64d0.ngrok.io/api-mobile-checkBDVersion/4";
+
+        String urlCancel = "https://bc9f74bc64d0.ngrok.io/api-mobile-checkBDVersion/" + String.valueOf(currentbdversion);
         try {
             response = new webApiGetRequest().execute(urlCancel).get();
 
@@ -235,67 +236,36 @@ public class Requests {
 
 
     }
-    public void downloadQuantity(){
+    public String downloadQuantity(){
         String response="";
 
         //NEED SQL QUERRY FOR CURRENT DB
         String urlCancel = "https://bc9f74bc64d0.ngrok.io/api-mobile-list";
         try {
-            response = new webApiGetRequest().execute(urlCancel).get();
-
-            //Using the JSON simple library parse the string into a json object
-            JSONParser parse = new JSONParser();
-            JSONObject data_obj = (JSONObject) parse.parse(response);
-
-            JSONArray arr = (JSONArray) data_obj.get("lstPiece");
-
-            for (int i = 0; i < arr.size(); i++) {
-
-                JSONObject new_obj = (JSONObject) arr.get(i);
-                //Querry SQL pour insert les nouvelle quantités
-
-            }
-
-
-
+            return response = new webApiGetRequest().execute(urlCancel).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
 
+        return "";
     }
-    public void downloadFullBD(){
+    public String downloadFullBD(){
         String response="";
 
         //NEED SQL QUERRY FOR CURRENT DB
         String urlCancel = "https://bc9f74bc64d0.ngrok.io/api-mobile-listeComplete";
+
         try {
-            response = new webApiGetRequest().execute(urlCancel).get();
-
-            //Using the JSON simple library parse the string into a json object
-            JSONParser parse = new JSONParser();
-            JSONObject data_obj = (JSONObject) parse.parse(response);
-
-            JSONArray arr = (JSONArray) data_obj.get("lstPiece");
-
-            for (int i = 0; i < arr.size(); i++) {
-
-                JSONObject new_obj = (JSONObject) arr.get(i);
-                //Querry SQL pour insert la nouvelle DB
-
-            }
-
+            return response = new webApiGetRequest().execute(urlCancel).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
 
+        return "";
     }
     public String getCommandState(int idCommande){
         String empruntState = "";
@@ -319,5 +289,21 @@ public class Requests {
         }
 
         return empruntState;
+    }
+    public String downloadCat(){
+        String urlcat = "https://bc9f74bc64d0.ngrok.io/api-mobile-getCategories";
+        String response = "";
+        String cat;
+
+        try {
+            return response = new webApiGetRequest().execute(urlcat).get();
+
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
