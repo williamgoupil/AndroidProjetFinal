@@ -1,3 +1,21 @@
+/**
+ * Nom de classe : MainActivity
+ * Description   : Activité principale qui permet d'authentifier les utilisateurs sur l'application
+ * @version       : 1.0
+ * Date          : 26/04/2021
+ * @author      : Olivier Vigneault
+ *  Vérification :
+ *  Date           	Nom               	Approuvé
+ *  =========================================================
+ *  2 mai 2021      Équipe entière      approuvé
+ *  Historique de modifications :
+ *  Date           	Nom               	Description
+ *  =========================================================
+ *  26 Avril 2021   Olivier             création du fichier
+ *  27 Avril 2021   Olivier             création du formulaire de connexion et du bouton
+ *  29 Avril 2021   Olivier             ajout des requêtes à l'API
+ *  ****************************************/
+
 package com.example.projetpiece;
 
 import android.content.Context;
@@ -39,7 +57,24 @@ public class MainActivity extends AppCompatActivity  {
         //Pour l'utilisation d'une notification doit etre appellé au debut
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        //si l'utilisateur s'est déjà authentifié sur l'application
+        if (sessionManager.getLogin()) {
+            HashMap<String, String> passwordStatus = requests.getPasswordStatus(sessionManager.getCourriel());
+            if ((passwordStatus.get("changePassword")).equals("true")) {
+                startActivity(new Intent(getApplicationContext(), ChangePasswordActivity.class));
+            } else {
+                startActivity(new Intent(getApplicationContext(), AccueilActivity.class));
+            }
+            finish();
+        } else {
+            if (isNetworkAvailable()) {
+                setContentView(R.layout.activity_main);
+            } else {
+                setContentView(R.layout.activity_no_internet);
+            }
+        }
+
         requests = new Requests();
 
         tvError = findViewById(R.id.txtErreur);
@@ -49,7 +84,6 @@ public class MainActivity extends AppCompatActivity  {
         btOubliMDP = findViewById(R.id.btnMDPoubli);
 
         sessionManager = new SessionManager(getApplicationContext());
-
 
         btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +101,8 @@ public class MainActivity extends AppCompatActivity  {
                 }
                 else {
                     HashMap<String, String> userInfo = requests.authenticateUser(sCourriel, sMotDePasse);
-                //si l'api nous retourne vrai, c'est que le courriel et le mot de passe sont les bons e.g id = authenticate(sCourriel, sMotdePasse)
+
+                //si l'api nous retourne vrai, c'est que le courriel et le mot de passe sont les bons
                 if ((userInfo.get("authenticated")).equals("true")) {
                     sessionManager.setLogin(true);
                     sessionManager.setCourriel(sCourriel);
@@ -86,16 +121,6 @@ public class MainActivity extends AppCompatActivity  {
             }
             }
         });
-
-        if (sessionManager.getLogin()) {
-            HashMap<String, String> passwordStatus = requests.getPasswordStatus(sessionManager.getCourriel());
-            if ((passwordStatus.get("changePassword")).equals("true")) {
-                startActivity(new Intent(getApplicationContext(), ChangePasswordActivity.class));
-            } else {
-                startActivity(new Intent(getApplicationContext(), AccueilActivity.class));
-            }
-            finish();
-        }
 
         btOubliMDP.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +152,7 @@ public class MainActivity extends AppCompatActivity  {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null;
     }
+
     public void downloadDBInfo(){
 
         db = DatabaseHelper.getInstance(this);

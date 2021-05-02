@@ -1,3 +1,19 @@
+/**
+ * Nom de classe : ResetPasswordActivity
+ * Description   : Activité appelé lorsque l'utilisateur souhaite réinitialiser son mot de passe
+ * @version       : 1.0
+ * Date          : 28/04/2021
+ * @author      : Olivier Vigneault
+ *  Vérification :
+ *  Date           	Nom               	Approuvé
+ *  =========================================================
+ *  2 mai 2021      Équipe entière      approuvé
+ *  Historique de modifications :
+ *  Date           	Nom               	Description
+ *  =========================================================
+ *  28 Avril 2021   Olivier              création du fichier et de la fonction onClick
+ *  29 Avril 2021   Olivier              ajout des requêtes à l'API
+ *  ****************************************/
 package com.example.projetpiece;
 
 import androidx.appcompat.app.AppCompatActivity;

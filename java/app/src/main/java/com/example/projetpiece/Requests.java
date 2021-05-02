@@ -1,3 +1,20 @@
+/**
+ * Nom de classe : Requests
+ * Description   : Classe qui contient l'ensemble des requêtes pour l'API
+ * @version       : 1.0
+ * Date          : 30/04/2021
+ * @author      : Olivier Vigneault, Pier-Alexandre Caron
+ *  Vérification :
+ *  Date           	Nom               	Approuvé
+ *  =========================================================
+ *  2 mai 2021      Équipe entière      approuvé
+ *  Historique de modifications :
+ *  Date           	Nom               	Description
+ *  =========================================================
+ *  30 Avril 2021   Olivier             fait la création du fichier et ajout des méthodes pour requêtes POST
+ *  1 mai 2021      Pier-Alexandre      ajout des méthodes pour requêtes GET
+ *  ****************************************/
+
 package com.example.projetpiece;
 
 import org.json.simple.JSONObject;
@@ -11,6 +28,12 @@ public class Requests {
 
 
 
+    /**
+     * méthode pour valider les informations de connexion de l'utilisateur
+     * @param courriel courriel de l'utilisateur
+     * @param password mot de passe de l'utilisateur
+     * @return array associatif contenant les éléments reçus dans la réponse de l'API
+     */
     public HashMap<String, String> authenticateUser(String courriel, String password) {
         HashMap<String, String> params = new HashMap<>();
         String response = "";
@@ -18,7 +41,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-authenticate");
+        params.put("url", "https://6e6d03f2c802.ngrok.io/api-mobile-authenticate");
         params.put("email", courriel);
         params.put("password", password);
 
@@ -45,6 +68,12 @@ public class Requests {
         return responseArray;
     }
 
+
+    /**
+     * vérifier si le courriel entré par l'utilisateur est associé à un compte dans la BD
+     * @param sCourriel courriel de l'utilisateur
+     * @return array associatif avec la réponse de l'API (courriel valide ou non)
+     */
     public HashMap<String, String> isEmailUsed(String sCourriel) {
         HashMap<String, String> params = new HashMap<>();
         String response = "";
@@ -52,7 +81,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-emailUsed");
+        params.put("url", "https://6e6d03f2c802.ngrok.io/api-mobile-emailUsed");
         params.put("email", sCourriel);
 
         try {
@@ -73,6 +102,11 @@ public class Requests {
         return responseArray;
     }
 
+    /**
+     * retourne le status du mot de passe de l'utilisateur (doit être changé ou non)
+     * @param courriel courriel de l'utilisateur
+     * @return array associatif avec la réponse de l'API (mot de passe doit être changé ou non)
+     */
     public HashMap<String, String> getPasswordStatus(String courriel) {
         HashMap<String, String> params = new HashMap<>();
         String response = "";
@@ -80,7 +114,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-passwordStatus");
+        params.put("url", "https://6e6d03f2c802.ngrok.io/api-mobile-passwordStatus");
         params.put("email", courriel);
 
         try {
@@ -101,6 +135,12 @@ public class Requests {
         return responseArray;
     }
 
+    /**
+     * verifie si le mot de passe est le même que celui présent en BD
+     * @param courriel courriel de l'utilisateur
+     * @param password nouveau mot de passe de l'utilisateur
+     * @return array associatif avec la réponse de l'API (même mot de passe ou non)
+     */
     public HashMap<String, String> verifyPassword(String courriel, String password) {
         HashMap<String, String> params = new HashMap<>();
         String response = "";
@@ -108,7 +148,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-verifyPassword");
+        params.put("url", "https://6e6d03f2c802.ngrok.io/api-mobile-verifyPassword");
         params.put("email", courriel);
         params.put("password", password);
 
@@ -130,6 +170,11 @@ public class Requests {
         return responseArray;
     }
 
+    /**
+     * changer le mot de passe de l'utilisateur (compte associé au courriel)
+     * @param courriel courriel de l'utilisateur
+     * @param password nouveau mot de passe à ajouter en BD
+     */
     public void changePassword(String courriel, String password) {
         HashMap<String, String> params = new HashMap<>();
         String response = "";
@@ -137,7 +182,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-new-password");
+        params.put("url", "https://6e6d03f2c802.ngrok.io/api-mobile-new-password");
         params.put("email", courriel);
         params.put("password", password);
 
@@ -155,6 +200,10 @@ public class Requests {
         }
     }
 
+    /**
+     * méthode pour réinitialiser le mot de passe de l'utilisateur (mot de passe temporaire envoyé par courriel)
+     * @param courriel courriel de l'utilisateur
+     */
     public void resetPassword(String courriel) {
         HashMap<String, String> params = new HashMap<>();
         String response = "";
@@ -162,7 +211,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-resetPassword");
+        params.put("url", "https://6e6d03f2c802.ngrok.io/api-mobile-resetPassword");
         params.put("email", courriel);
 
         try {

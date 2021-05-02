@@ -1,3 +1,18 @@
+/**
+ * Nom de classe : webApiPostRequest
+ * Description   : tâche asynchrone s'occupant d'effectuer l'envoi des requêtes POST à l'API
+ * @version       : 1.0
+ * Date          : 29/04/2021
+ * @author      : Olivier Vigneault
+ *  Vérification :
+ *  Date           	Nom               	Approuvé
+ *  =========================================================
+ *  2 mai 2021      Équipe entière      approuvé
+ *  Historique de modifications :
+ *  Date           	Nom               	Description
+ *  =========================================================
+ *  29 Avril 2021   Olivier              création du fichier et de la tâche
+ *  ****************************************/
 package com.example.projetpiece;
 
 import android.os.AsyncTask;
@@ -17,6 +32,10 @@ import java.util.Scanner;
 public class webApiPostRequest extends AsyncTask<HashMap, Void, String> {
 
     @Override
+    /**
+     * @param params map contenant l'url d'envoi (à contacter) et les informations à envoyer avec la requête
+     * @return réponse reçu de l'API sous forme d'array associatif
+     */
     protected String doInBackground(HashMap... params) {
         HashMap<String, String> map = params[0];
         try {

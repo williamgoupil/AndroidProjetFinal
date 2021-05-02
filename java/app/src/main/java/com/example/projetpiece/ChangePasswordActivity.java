@@ -1,3 +1,20 @@
+/**
+ * Nom de classe : ChangePasswordActivity
+ * Description   : Activité qui permet de changer le mot de passe de l'utilisateur
+ * @version       : 1.0
+ * Date          : 26/04/2021
+ * @author      : Olivier Vigneault
+ *  Vérification :
+ *  Date           	Nom               	Approuvé
+ *  =========================================================
+ *  2 mai 2021      Équipe entière      approuvé
+ *  Historique de modifications :
+ *  Date           	Nom               	Description
+ *  =========================================================
+ *  26 Avril 2021   Olivier             création du fichier
+ *  27 Avril 2021   Olivier             création des champs editText et du bouton
+ *  29 Avril 2021   Olivier             ajout des requêtes à l'API
+ *  ****************************************/
 package com.example.projetpiece;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,6 +58,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 String sMotDePasse = etMotDePasse.getText().toString().trim();
                 String sConfirmation = etMotDePasseConfirmation.getText().toString().trim();
 
+                //si un des champs est vide
                 if (sMotDePasse.equals("") || sConfirmation.equals("")) {
                     if (sMotDePasse.equals("")) {
                         etMotDePasse.setError("Entrez votre nouveau mot de passe");
@@ -50,6 +68,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     }
                 }
 
+                //si les deux champs ne sont pas équivalents -> pas le même mot de passe entré
                 else if (!sMotDePasse.equals(sConfirmation)) {
                     tvError.setTextColor(Color.parseColor("#FF0000"));
                     tvError.setText("Les mots de passes doivent être identiques!");
@@ -57,6 +76,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 else
                 {
                     HashMap<String, String> data = requests.verifyPassword(sessionManager.getCourriel(), sMotDePasse);
+                    //si le nouveau mot de passe est le même mot de passe que dans la BD
                     if ((data.get("samePassword")).equals("true")) {
                         tvError.setTextColor(Color.parseColor("#FF0000"));
                         tvError.setText("Le mot de passe doit être différent du mot de passe précédent!");
