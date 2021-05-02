@@ -44,6 +44,10 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
 
     @NonNull
     @Override
+    /**
+     * Méthode qui remplis le layout et qui initialise le onclic listener pour le RecyclerView
+     * (non utiliser en final)
+     */
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.rowemprunt,parent,false);
@@ -53,7 +57,12 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
         return new MyViewHolder(view);
     }
 
-
+    /**
+     * Constructeur par défault
+     * @param context Le context de RV
+     * @param listEmprunt La liste des emprunt à afficher
+     * @param RVEmprunt La recycleview à utiliser
+     */
     public AdapterEmprunt(Context context, List<Empruntpersonnel> listEmprunt, RecyclerView RVEmprunt){
 
         this.listEmprunt = listEmprunt;
@@ -61,7 +70,12 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
         this.RVEmprunt = RVEmprunt;
     }
 
-
+    /**
+     * Méthode qui permet de lier les champs avec les données du arraylist
+     *
+     * @param holder
+     * @param position position de chaque pièce
+     */
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         db = DatabaseHelper.getInstance(context);
@@ -77,9 +91,17 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
         holder.dateFin.setText(dateFin);
     }
 
+    /**
+     * Méthode pour obtenir le nombre d'item dans la liste
+     * @return int nombre d'item dans la liste
+     */
     @Override
     public int getItemCount(){return listEmprunt.size(); }
 
+    /**
+     * Permet de supprimer un item dans l'array
+     * @param position position dans l'array
+     */
     public void deleteItem(int position) {
 
         mRecentlyDeletedItem = listEmprunt.get(position);
@@ -120,6 +142,9 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
         }
     }
 
+    /**
+     * Permet de remettre l'enregistrement dans la recycle view
+     */
     private void showUndoSnackbar() {
         View view = RVEmprunt;
         Snackbar snackbar = Snackbar.make(view, R.string.snack_bar_text, Snackbar.LENGTH_LONG);
@@ -128,6 +153,9 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
         snackbar.show();
     }
 
+    /**
+     * Permet de annuler la suppression d'un enregistrement
+     */
     private void undoDelete() {
         listEmprunt.add(mRecentlyDeletedItemPosition,
                 mRecentlyDeletedItem);
@@ -141,7 +169,10 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
         TextView etat;
 
 
-
+        /**
+         * Constructeur pour lier chanque champ à chaque attribut
+         * @param itemView La view concerné
+         */
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 

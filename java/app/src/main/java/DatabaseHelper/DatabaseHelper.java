@@ -420,7 +420,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return listEmprunt;
     }
 
-
+    /**
+     * Permet de supprimer un emprunt de la BD selon l'id
+     * @param id id de l'emprunt à supprimer
+     */
     public void deleteEmpruntById(int id) {
         SQLiteDatabase database = this.getWritableDatabase();
 

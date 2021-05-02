@@ -13,21 +13,49 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
     private AdapterEmprunt mAdapter;
     private final ColorDrawable background;
 
+    /**
+     * Constructeur par défault
+     * @param adapter adapter à appliquer la swipe to delete
+     */
     public SwipeToDeleteCallback(AdapterEmprunt adapter) {
         super(0,ItemTouchHelper.LEFT);
         mAdapter = adapter;
         background = new ColorDrawable(Color.RED);
     }
+
+    /**
+     * Permet de déterminer l'action à effectuer
+     * @param viewHolder la recycle view concerné
+     * @param direction la direction pour que le swipe fonctionne
+     */
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         int position = viewHolder.getAdapterPosition();
         mAdapter.deleteItem(position);
     }
+
+    /**
+     * quoi faire lorsque le user bouge dans l'app
+     * @param recyclerView la recycleView concerner
+     * @param viewHolder Le viewHolder Concerner
+     * @param target
+     * @return l'action à effectuer
+     */
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
         return false;
     }
 
+    /**
+     * Quoi dessinner lorsque le swipe est fait
+     * @param c
+     * @param recyclerView
+     * @param viewHolder
+     * @param dX
+     * @param dY
+     * @param actionState
+     * @param isCurrentlyActive
+     */
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
