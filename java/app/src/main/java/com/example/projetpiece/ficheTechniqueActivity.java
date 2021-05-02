@@ -37,6 +37,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import DatabaseHelper.DatabaseHelper;
 import model.Empruntpersonnel;
@@ -274,6 +275,8 @@ public class ficheTechniqueActivity extends AppCompatActivity implements DatePic
 
         Empruntpersonnel e = new Empruntpersonnel(Integer.parseInt(QTEDesirer.getText().toString()),todayDate,dateChoisie,"Envoyé, en attente",Integer.parseInt(idPiece),false);
 
+        SessionManager sm = new SessionManager(getApplicationContext());
+        String idUser = sm.getID();
 
         int newQTE = Integer.parseInt(qtePiece.getText().toString()) - Integer.parseInt(QTEDesirer.getText().toString());
         db.updateQTE(idPiece,newQTE);
@@ -282,15 +285,16 @@ public class ficheTechniqueActivity extends AppCompatActivity implements DatePic
 
             Requests requestEmprunt = new Requests();
 
-            //la fonction est pas fini sur la partie web mais ceci devrais marcher
-            //retour est un int ( durée en jour de location )
-            //idEmprunt = requestEmprunt.makeReservation(int idPiece, int qqtPiece, int idUser, int retour);
+            long diffInMillies = Math.abs(dateChoisie.getTime() - todayDate.getTime());
+            long diffinDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
-            //e.setEnvoyer(true);
+            int idEmprunt = requestEmprunt.makeReservation(e.getPiece(), e.getQTEEmprunter(), Integer.parseInt(idUser), (int)diffinDays);
+
+            e.setEnvoyer(true);
+            e.setId(idEmprunt);
         }
-        SessionManager sm = new SessionManager(getApplicationContext());
-        String UserEmail = sm.getCourriel();
-        db.addEmprunt(e,UserEmail);
+
+        db.addEmprunt(e,idUser);
 
         showSuccessAlert("Votre Emprunt", "Vous pouvez maintenant suivre l'état de votre emprunt dans la section Mes emprunts ! ");
     }

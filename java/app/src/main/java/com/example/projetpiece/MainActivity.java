@@ -113,21 +113,7 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-        Button buttonInventaire = (Button) findViewById(R.id.buttonInventaire);
-        buttonInventaire.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, InventaireActivity.class);
-                startActivity(intent);
-            }
-        });
-        Button buttonEmprunt = (Button) findViewById(R.id.buttonEmprunt);
-        buttonEmprunt.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
 
-                Intent intent = new Intent(MainActivity.this, EmpruntActivity.class);
-                startActivity(intent);
-            }
-        });
         bootload();
     }
 

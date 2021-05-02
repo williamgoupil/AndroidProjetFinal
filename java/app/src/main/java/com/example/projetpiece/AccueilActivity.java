@@ -55,5 +55,21 @@ public class AccueilActivity extends AppCompatActivity {
                 alertDialog.show();
             }
         });
+        Button buttonInventaire = (Button) findViewById(R.id.buttonInventaire);
+        buttonInventaire.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(AccueilActivity.this, InventaireActivity.class);
+                startActivity(intent);
+            }
+        });
+        Button buttonEmprunt = (Button) findViewById(R.id.buttonEmprunt);
+        buttonEmprunt.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                Intent intent = new Intent(AccueilActivity.this, EmpruntActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
 }
