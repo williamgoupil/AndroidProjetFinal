@@ -14,8 +14,9 @@ public class webRequest {
 
         int idReservation=0;
         String response="";
+
         //Il faut faire un concatenate pour avoir le bon URL
-        String urlReservation = "https://d11d840bcd81.ngrok.io/api-mobile-annuleremprunt//api-mobile-reserverPieces/{idPiece}/{qqtPiece}/{idUser}/{retour}";
+        String urlReservation = "https://bc9f74bc64d0.ngrok.io/api-mobile-annuleremprunt//api-mobile-reserverPieces/{idPiece}/{qqtPiece}/{idUser}/{retour}";
         try {
             response = new webApiGetRequest().execute(urlReservation).get();
 
@@ -41,7 +42,7 @@ public class webRequest {
         int responseCode=1;
 
         //NEED SQL QUERRY FOR CURRENT DB
-        String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-checkBDVersion/4";
+        String urlCancel = "https://bc9f74bc64d0.ngrok.io/api-mobile-checkBDVersion/4";
         try {
             response = new webApiGetRequest().execute(urlCancel).get();
 
@@ -69,7 +70,7 @@ public class webRequest {
         String response="";
 
         //NEED SQL QUERRY FOR CURRENT DB
-        String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-list";
+        String urlCancel = "https://bc9f74bc64d0.ngrok.io/api-mobile-list";
         try {
             response = new webApiGetRequest().execute(urlCancel).get();
 
@@ -101,7 +102,7 @@ public class webRequest {
         String response="";
 
         //NEED SQL QUERRY FOR CURRENT DB
-        String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-listeComplete";
+        String urlCancel = "https://bc9f74bc64d0.ngrok.io/api-mobile-listeComplete";
         try {
             response = new webApiGetRequest().execute(urlCancel).get();
 
@@ -130,7 +131,7 @@ public class webRequest {
     public String getCommandState(int idCommande){
         String empruntState = "";
         String response = "";
-        String urlState = "https://d11d840bcd81.ngrok.io/api-mobile-listeComplete";
+        String urlState = "https://bc9f74bc64d0.ngrok.io/api-mobile-listeComplete";
 
         try {
             response = new webApiGetRequest().execute(urlState).get();
