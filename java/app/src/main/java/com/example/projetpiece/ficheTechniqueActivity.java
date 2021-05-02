@@ -280,7 +280,7 @@ public class ficheTechniqueActivity extends AppCompatActivity implements DatePic
         if(isNetworkAvailable()){
             //Fonction à PA pour envoyer avec l'API
 
-            webRequest requestEmprunt = new webRequest();
+            Requests requestEmprunt = new Requests();
 
             //la fonction est pas fini sur la partie web mais ceci devrais marcher
             //retour est un int ( durée en jour de location )

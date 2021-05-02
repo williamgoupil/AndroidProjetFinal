@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity  {
 
         //Pour l'utilisation d'une notification doit etre appellé au debut
 
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         requests = new Requests();
@@ -130,17 +129,11 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
         bootload();
-
-        Requests request = new Requests();
-
-        request.downloadDBInfo();
     }
 
 
     public void bootload(){
         downloadDBInfo();
-
-        webRequest webRequest = new webRequest();
 
         if(isNetworkAvailable()) {
             //querry pour trouver les commandes pas send
@@ -155,16 +148,14 @@ public class MainActivity extends AppCompatActivity  {
         return activeNetworkInfo != null;
     }
     public void downloadDBInfo(){
-
-        webRequest webRequest = new webRequest();
-        int responseCodeBD = webRequest.checkBDVersion();
+        int responseCodeBD = requests.checkBDVersion();
         CharSequence text = "";
         if( responseCodeBD == 0 ) {
-            webRequest.downloadQuantity();
+            requests.downloadQuantity();
             text = "BD a jour";
         } else {
             //insert le nouveaux Code de la BD
-            webRequest.downloadFullBD();
+            requests.downloadFullBD();
             text = "BD mise a jour";
         }
 
