@@ -1,9 +1,9 @@
 /**
- * Nom de classe : Requests
- * Description   : Classe qui contient l'ensemble des requêtes pour l'API
+ * Nom de classe : MainActivity
+ * Description   : Activité principale qui permet d'authentifier les utilisateurs sur l'application
  * @version       : 1.0
- * Date          : 30/04/2021
- * @author      : Olivier Vigneault, Pier-Alexandre Caron
+ * Date          : 26/04/2021
+ * @author      : Olivier Vigneault
  *  Vérification :
  *  Date           	Nom               	Approuvé
  *  =========================================================
@@ -11,9 +11,14 @@
  *  Historique de modifications :
  *  Date           	Nom               	Description
  *  =========================================================
- *  30 Avril 2021   Olivier             fait la création du fichier et ajout des méthodes pour requêtes POST
- *  1 mai 2021      Pier-Alexandre      ajout des méthodes pour requêtes GET
+ *
+ *  28 Avril 2021 P-A                   Ajout des méthodes pour tester la version de la BD et les méthode pour actualiser la BD
+ *  29            P-A                   Modification de certaine méthode pour réutiliser la connexion en get plus facilement
+ *  30 Avril        P-A                 Ajout de méthode pour gerer les emprunts
+ *  1 Avril         P-A                 Correction de bug
+ *  2 Avril         P-A                 Modification de méthode et ajout de loadCatégorie et loadEmprunt
  *  ****************************************/
+
 
 package com.example.projetpiece;
 
@@ -28,12 +33,6 @@ public class Requests {
 
 
 
-    /**
-     * méthode pour valider les informations de connexion de l'utilisateur
-     * @param courriel courriel de l'utilisateur
-     * @param password mot de passe de l'utilisateur
-     * @return array associatif contenant les éléments reçus dans la réponse de l'API
-     */
     public HashMap<String, String> authenticateUser(String courriel, String password) {
         HashMap<String, String> params = new HashMap<>();
         String response = "";
@@ -41,7 +40,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://6e6d03f2c802.ngrok.io/api-mobile-authenticate");
+        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-authenticate");
         params.put("email", courriel);
         params.put("password", password);
 
@@ -68,12 +67,6 @@ public class Requests {
         return responseArray;
     }
 
-
-    /**
-     * vérifier si le courriel entré par l'utilisateur est associé à un compte dans la BD
-     * @param sCourriel courriel de l'utilisateur
-     * @return array associatif avec la réponse de l'API (courriel valide ou non)
-     */
     public HashMap<String, String> isEmailUsed(String sCourriel) {
         HashMap<String, String> params = new HashMap<>();
         String response = "";
@@ -81,7 +74,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://6e6d03f2c802.ngrok.io/api-mobile-emailUsed");
+        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-emailUsed");
         params.put("email", sCourriel);
 
         try {
@@ -102,11 +95,6 @@ public class Requests {
         return responseArray;
     }
 
-    /**
-     * retourne le status du mot de passe de l'utilisateur (doit être changé ou non)
-     * @param courriel courriel de l'utilisateur
-     * @return array associatif avec la réponse de l'API (mot de passe doit être changé ou non)
-     */
     public HashMap<String, String> getPasswordStatus(String courriel) {
         HashMap<String, String> params = new HashMap<>();
         String response = "";
@@ -114,7 +102,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://6e6d03f2c802.ngrok.io/api-mobile-passwordStatus");
+        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-passwordStatus");
         params.put("email", courriel);
 
         try {
@@ -135,12 +123,6 @@ public class Requests {
         return responseArray;
     }
 
-    /**
-     * verifie si le mot de passe est le même que celui présent en BD
-     * @param courriel courriel de l'utilisateur
-     * @param password nouveau mot de passe de l'utilisateur
-     * @return array associatif avec la réponse de l'API (même mot de passe ou non)
-     */
     public HashMap<String, String> verifyPassword(String courriel, String password) {
         HashMap<String, String> params = new HashMap<>();
         String response = "";
@@ -148,7 +130,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://6e6d03f2c802.ngrok.io/api-mobile-verifyPassword");
+        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-verifyPassword");
         params.put("email", courriel);
         params.put("password", password);
 
@@ -170,11 +152,6 @@ public class Requests {
         return responseArray;
     }
 
-    /**
-     * changer le mot de passe de l'utilisateur (compte associé au courriel)
-     * @param courriel courriel de l'utilisateur
-     * @param password nouveau mot de passe à ajouter en BD
-     */
     public void changePassword(String courriel, String password) {
         HashMap<String, String> params = new HashMap<>();
         String response = "";
@@ -182,7 +159,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://6e6d03f2c802.ngrok.io/api-mobile-new-password");
+        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-new-password");
         params.put("email", courriel);
         params.put("password", password);
 
@@ -200,10 +177,6 @@ public class Requests {
         }
     }
 
-    /**
-     * méthode pour réinitialiser le mot de passe de l'utilisateur (mot de passe temporaire envoyé par courriel)
-     * @param courriel courriel de l'utilisateur
-     */
     public void resetPassword(String courriel) {
         HashMap<String, String> params = new HashMap<>();
         String response = "";
@@ -211,7 +184,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://6e6d03f2c802.ngrok.io/api-mobile-resetPassword");
+        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-resetPassword");
         params.put("email", courriel);
 
         try {
@@ -228,14 +201,21 @@ public class Requests {
         }
     }
 
-    //retour est un int ( durée en jour de location )
+    /**
+     *  fais une connection au site pour creer un enregistrement
+     * @param idPiece le id pour identifier la piece
+     * @param qqtPiece un int la quantité de piece
+     * @param idUser le id du user
+     * @param retour un int qui sera la durée en jour de l'emprunt
+     * @return un int est le ID de la réservation dans la BD de l'api
+     */
     public int makeReservation(int idPiece, int qqtPiece, int idUser, int retour){
 
         int idReservation=0;
         String response="";
 
         //Il faut faire un concatenate pour avoir le bon URL
-        String urlReservation = "https://bc9f74bc64d0.ngrok.io/api-mobile-annuleremprunt//api-mobile-reserverPieces/{idPiece}/{qqtPiece}/{idUser}/{retour}";
+        String urlReservation = "https://bc9f74bc64d0.ngrok.io/api-mobile-annuleremprunt/api-mobile-reserverPieces/"+idPiece+qqtPiece+idUser+retour;
         try {
             response = new webApiGetRequest().execute(urlReservation).get();
 
@@ -256,6 +236,12 @@ public class Requests {
 
         return idReservation;
     }
+
+    /**
+     * fais une connection a l'api et recois un réponse selon le id actuel de BD envoyé
+     * @param currentbdversion un int qui est le id de la BDCourante
+     * @return la réponse du site web qui sera un int
+     */
     public int checkBDVersion(int currentbdversion){
         String response="";
         int responseCode=1;
@@ -285,6 +271,11 @@ public class Requests {
 
 
     }
+
+    /**
+     * lis le site pour avoir les quantités des pieces
+     * @return un string qui est la liste des pieces et leur inventaire
+     */
     public String downloadQuantity(){
         String response="";
 
@@ -300,6 +291,11 @@ public class Requests {
 
         return "";
     }
+
+    /**
+     * va lire l'entiéreté de l'inventaire sur le site
+     * @return un string qui est une liste json de l,inventaire
+     */
     public String downloadFullBD(){
         String response="";
 
@@ -316,30 +312,11 @@ public class Requests {
 
         return "";
     }
-    public String getCommandState(int idCommande){
-        String empruntState = "";
-        String response = "";
-        String urlState = "https://bc9f74bc64d0.ngrok.io/api-mobile-listeComplete";
 
-        try {
-            response = new webApiGetRequest().execute(urlState).get();
-            JSONParser parse = new JSONParser();
-            JSONObject obj = (JSONObject) parse.parse(response);
-
-
-            empruntState = obj.get("nomState").toString();
-
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return empruntState;
-    }
-
+    /**
+     * apelle request get pour aller cherhcer l'entiéreté des categorie
+     * @return un string qui est la liste des categorie
+     */
     public String downloadCat(){
         String urlcat = "https://bc9f74bc64d0.ngrok.io/api-mobile-getCategories";
         String response = "";
@@ -357,15 +334,18 @@ public class Requests {
         return "";
     }
 
-    public String downloadEmprunt(int idUser){
-        String urlEmprunt = "https://bc9f74bc64d0.ngrok.io/api-mobile-getCategories";
+    /**
+     *
+     * @param idUser un string qui est le id du suer
+     * @return un string qui est la réponse du siteWeb
+     */
+    public String loadEmprunt(String idUser){
+
+        String urlrequeteParUser= "https://bc9f74bc64d0.ngrok.io/api-mobile-checkEmpruntUser"+idUser;
+
         String response = "";
-
-
         try {
-            return response = new webApiGetRequest().execute(urlEmprunt).get();
-
-
+            return response = new webApiGetRequest().execute(urlrequeteParUser).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -373,7 +353,4 @@ public class Requests {
         }
         return "";
     }
-
-
-
 }

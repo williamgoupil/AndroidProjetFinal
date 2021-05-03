@@ -432,6 +432,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("DELETE FROM "+TABLE_EMPRUNTPERSONNEL+" WHERE " + KEY_ID + " = " + id);
     }
 
+    /**
+     * donne le id actuel dans la db
+     * @return le id actuel de la BD
+     */
     public int getcurrentDBVersion(){
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -442,6 +446,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return 0;
     }
+
+    /**
+     *
+     * @param inventory un string qui est un array json contient l'ensemble de l'inventaire
+     */
     public void loadquantity(String inventory){
         try {
 
@@ -465,6 +474,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    /**
+     *
+     * @param newInventory un string qui est un array json contient l'ensemble du contenu de la table piece
+     */
     public void loadNewInventory(String newInventory){
         try {
 
@@ -490,6 +503,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
+
+    /**
+     *
+     * @param allCat un string qui est un array json contient l'ensemble des catégorie
+     */
     public void loadNewCat(String allCat){
         try {
 
@@ -515,6 +533,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
+
+    /**
+     *
+     * @param bdVersion un int qui est la bouvelle version de la BD
+     */
     public void newBDVersion(int bdVersion){
         BDVersion bdVers = new BDVersion();
 
@@ -528,6 +551,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.insertOrThrow(TABLE_BDVERSION, null, values);
 
     }
+
+    /**
+     * Regarde si des emprunts n'on pas été envoyé et les envot
+     */
     public void checkUnsent(){
         Requests request = new Requests();
         List<Empruntpersonnel> listEmprunt = new ArrayList<>();
@@ -567,7 +594,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-
+    /**
+     *
+     * @param emprunt un string qui est un json de tout les emprunt du user
+     * @param idUser un string qui est le id d'un user
+     */
     public void loadEmprunt(String emprunt, String idUser){
         try {
 
@@ -576,23 +607,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             JSONObject data_obj = (JSONObject) parse.parse(emprunt);
 
-            JSONArray arr = (JSONArray) data_obj.get("lstemprunts");
+            JSONArray arr = (JSONArray) data_obj.get("lstEmprunts");
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
             for (int i = 0; i < arr.size(); i++) {
 
                 JSONObject new_obj = (JSONObject) arr.get(i);
 
-
-                Date DateDebut = formatter.parse(new_obj.get("dateDebut").toString());
-                Date DateFin = formatter.parse(new_obj.get("dateFin").toString());
+                JSONArray finarr = (JSONArray) new_obj.get("dateRetourPrevue");
+                JSONArray debutarr = (JSONArray) new_obj.get("dateDemande");
+                Date DateDebut = formatter.parse(debutarr.get(1).toString());
+                Date DateFin = formatter.parse(new_obj.get(1).toString());
 
                 Empruntpersonnel e = new Empruntpersonnel(
-                        Integer.parseInt(new_obj.get("qteEmprunter").toString()),
+                        Integer.parseInt(new_obj.get("qteDisponible").toString()),
                         DateDebut,
                         DateFin,
-                        new_obj.get("etat").toString(),
-                        Integer.parseInt(new_obj.get("idPiece").toString()),
+                        new_obj.get("Etat").toString(),
+                        Integer.parseInt(new_obj.get(1).toString()),                //apparemnt 1 est la clé du id piece
                         true);
 
                addEmprunt(e, idUser);
@@ -600,6 +632,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
 
         }catch (org.json.simple.parser.ParseException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
     }

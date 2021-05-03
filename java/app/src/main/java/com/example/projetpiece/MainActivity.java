@@ -14,6 +14,7 @@
  *  26 Avril 2021   Olivier             création du fichier
  *  27 Avril 2021   Olivier             création du formulaire de connexion et du bouton
  *  29 Avril 2021   Olivier             ajout des requêtes à l'API
+ *  29 Avril 2021 P-A                   Ajout de bootload
  *  ****************************************/
 
 package com.example.projetpiece;
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity  {
 
                 //si l'api nous retourne vrai, c'est que le courriel et le mot de passe sont les bons
                 if ((userInfo.get("authenticated")).equals("true")) {
+                    bootload();
                     sessionManager.setLogin(true);
                     sessionManager.setCourriel(sCourriel);
                     sessionManager.setID(userInfo.get("id"));
@@ -111,6 +113,7 @@ public class MainActivity extends AppCompatActivity  {
                     if ((userInfo.get("changePassword")).equals("true")) {
                         startActivity(new Intent(getApplicationContext(), ChangePasswordActivity.class));
                     } else {
+
                         startActivity(new Intent(getApplicationContext(), AccueilActivity.class));
                     }
                     finish();
@@ -131,18 +134,22 @@ public class MainActivity extends AppCompatActivity  {
         });
 
 
-      // bootload();
+
     }
 
-
+    /**
+     * s'éxécute lorsque l'utilisateur c'est connecté pour telecharger les infos nécéssaire
+     */
     public void bootload(){
 
         db = DatabaseHelper.getInstance(this);
 
         if(isNetworkAvailable()) {
             downloadDBInfo();
-            //querry pour trouver les commandes pas send
-            //send them
+            db.checkUnsent();
+            db.loadEmprunt( requests.loadEmprunt(sessionManager.getID()),sessionManager.getID());
+
+          
         }
 
     }
