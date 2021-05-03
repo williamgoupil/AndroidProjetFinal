@@ -19,6 +19,9 @@
 
 package com.example.projetpiece;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -80,7 +83,9 @@ public class InventaireActivity extends AppCompatActivity {
         super.onResume();
         db = DatabaseHelper.getInstance(this);
         bootload bootload = new bootload();
-        bootload.execute(db,sessionManager.getID());
+        if(isNetworkAvailable()){
+            bootload.execute(db,sessionManager.getID());
+        }
         setFilterCategorie();
         insertRV();
     }
@@ -92,9 +97,18 @@ public class InventaireActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        if(isNetworkAvailable()){
+            bootload.execute(db,sessionManager.getID());
+        }
         setFilterCategorie();
         insertRV();
+    }
+    
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null;
     }
 
     /**

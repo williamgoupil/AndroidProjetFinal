@@ -1,30 +1,19 @@
 package com.example.projetpiece;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.widget.Toast;
-
 import DatabaseHelper.DatabaseHelper;
 
 public class bootload {
 
     Requests requests = new Requests();
 
-    public void execute(DatabaseHelper db,String id){
-        if(isNetworkAvailable()) {
+    public static void execute(DatabaseHelper db, String id){
+
             downloadDBInfo(db);
             db.checkUnsent();
             db.loadEmprunt( requests.loadEmprunt(id),id);
 
 
-        }
-    }
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null;
+
     }
 
     public void downloadDBInfo(DatabaseHelper db){

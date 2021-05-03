@@ -18,6 +18,9 @@
 package com.example.projetpiece;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -118,7 +121,9 @@ public class EmpruntActivity extends AppCompatActivity {
         super.onResume();
         db = DatabaseHelper.getInstance(this);
         bootload bootload = new bootload();
-        bootload.execute(db,sessionManager.getID());
+        if(isNetworkAvailable()){
+            bootload.execute(db,sessionManager.getID());
+        }
     }
 
     @Override
@@ -128,6 +133,15 @@ public class EmpruntActivity extends AppCompatActivity {
 
         db = DatabaseHelper.getInstance(this);
         bootload bootload = new bootload();
-        bootload.execute(db, sessionManager.getID());
+        if(isNetworkAvailable()){
+            bootload.execute(db,sessionManager.getID());
+        }
     }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null;
+    }
+
 }

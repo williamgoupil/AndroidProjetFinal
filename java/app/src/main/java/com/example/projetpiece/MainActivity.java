@@ -142,7 +142,10 @@ public class MainActivity extends AppCompatActivity  {
         super.onResume();
         db = DatabaseHelper.getInstance(this);
         bootload bootload = new bootload();
-        bootload.execute(db,sessionManager.getID());
+        if(isNetworkAvailable()){
+            bootload.execute(db,sessionManager.getID());
+        }
+
     }
 
     @Override
@@ -152,7 +155,9 @@ public class MainActivity extends AppCompatActivity  {
 
         db = DatabaseHelper.getInstance(this);
         bootload bootload = new bootload();
-        bootload.execute(db, sessionManager.getID());
+        if(isNetworkAvailable()){
+            bootload.execute(db,sessionManager.getID());
+        }
     }
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
