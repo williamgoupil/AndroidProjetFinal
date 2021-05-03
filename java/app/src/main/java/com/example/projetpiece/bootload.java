@@ -4,19 +4,19 @@ import DatabaseHelper.DatabaseHelper;
 
 public class bootload {
 
-    Requests requests = new Requests();
+    static Requests requests = new Requests();
 
     public static void execute(DatabaseHelper db, String id){
 
-            downloadDBInfo(db);
-            db.checkUnsent();
-            db.loadEmprunt( requests.loadEmprunt(id),id);
+        downloadDBInfo(db,id);
+        db.checkUnsent();
+        //db.loadEmprunt( requests.loadEmprunt(id),id);
 
 
 
     }
 
-    public void downloadDBInfo(DatabaseHelper db){
+    public static void downloadDBInfo(DatabaseHelper db,String id){
 
 
 
@@ -34,6 +34,7 @@ public class bootload {
             db.newBDVersion(responseCodeBD);
             db.loadNewCat(requests.downloadCat());
             db.loadNewInventory(requests.downloadFullBD());
+            db.loadEmprunt(requests.loadEmprunt(id),id);
 
         }
 

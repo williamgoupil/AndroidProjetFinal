@@ -124,21 +124,21 @@ public class AdapterEmprunt extends RecyclerView.Adapter<AdapterEmprunt.MyViewHo
         String response="";
         try {
             //URL pour cancel une certaine commande
-            String urlCancel = "https://d11d840bcd81.ngrok.io/api-mobile-annuleremprunt/" + mRecentlyDeletedItem.getId();
+            String urlCancel = "https://177aabd47942.ngrok.io/api-mobile-annuleremprunt/" + mRecentlyDeletedItem.getId();
             response = new webApiGetRequest().execute(urlCancel).get();
 
             JSONParser parse = new JSONParser();
             JSONObject data_obj = (JSONObject) parse.parse(response);
 
-            int responseCode = (int) data_obj.get("codeErreur");
+            String responseCode =  data_obj.get("codeErreur").toString();
 
             //1 pas réussi
             //0 réussi
 
-            if(responseCode == 1) {
+            if(responseCode.equals("1")) {
                 showUndoSnackbar();
             }
-            else if(responseCode == 0){
+            else if(responseCode.equals("0")){
                 db = DatabaseHelper.getInstance(context);
                 db.deleteEmpruntById(mRecentlyDeletedItem.getId());
             }

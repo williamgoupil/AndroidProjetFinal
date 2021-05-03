@@ -49,7 +49,7 @@ public class webApiGetRequest extends AsyncTask<String, Void, String> {
                 } else {
 
                     String inline = "";
-                    Scanner scanner = new Scanner(url.openStream());
+                    Scanner scanner = new Scanner(conn.getInputStream());
 
                     //Write all the JSON data into a string using a scanner
                     while (scanner.hasNext()) {

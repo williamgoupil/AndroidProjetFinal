@@ -65,45 +65,43 @@ public class InventaireActivity extends AppCompatActivity {
 
         db = DatabaseHelper.getInstance(this);
         recyclerView = (RecyclerView) findViewById(R.id.RVInventaire);
+        sessionManager = new SessionManager(getApplicationContext());
 
        // addItemDB();
+
+        bootload bootload = new bootload();
+        if(isNetworkAvailable()){
+            bootload.execute(db,sessionManager.getID());
+        }
 
         setFilterCategorie();
         insertRV();
 
 
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setFilterCategorie();
+        insertRV();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        setFilterCategorie();
+        insertRV();
     }
 
     /**
      * Méthode qui fait réaffiche l'inventaire sur le resume
      *
      */
-    @Override
-    protected void onResume() {
-        super.onResume();
-        db = DatabaseHelper.getInstance(this);
-        bootload bootload = new bootload();
-        if(isNetworkAvailable()){
-            bootload.execute(db,sessionManager.getID());
-        }
-        setFilterCategorie();
-        insertRV();
-    }
 
-    /**
-     * Méthode qui fait réaffiche l'inventaire sur le onstart
-     *
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(isNetworkAvailable()){
-            bootload.execute(db,sessionManager.getID());
-        }
-        setFilterCategorie();
-        insertRV();
-    }
-    
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

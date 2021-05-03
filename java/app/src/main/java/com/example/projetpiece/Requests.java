@@ -40,7 +40,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-authenticate");
+        params.put("url", "https://177aabd47942.ngrok.io/api-mobile-authenticate");
         params.put("email", courriel);
         params.put("password", password);
 
@@ -74,7 +74,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-emailUsed");
+        params.put("url", "https://177aabd47942.ngrok.io/api-mobile-emailUsed");
         params.put("email", sCourriel);
 
         try {
@@ -102,7 +102,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-passwordStatus");
+        params.put("url", "https://177aabd47942.ngrok.io/api-mobile-passwordStatus");
         params.put("email", courriel);
 
         try {
@@ -130,7 +130,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-verifyPassword");
+        params.put("url", "https://177aabd47942.ngrok.io/api-mobile-verifyPassword");
         params.put("email", courriel);
         params.put("password", password);
 
@@ -159,7 +159,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-new-password");
+        params.put("url", "https://177aabd47942.ngrok.io/api-mobile-new-password");
         params.put("email", courriel);
         params.put("password", password);
 
@@ -184,7 +184,7 @@ public class Requests {
         JSONParser parse = new JSONParser();
         HashMap<String, String> responseArray = new HashMap<>();
 
-        params.put("url", "https://bc9f74bc64d0.ngrok.io/api-mobile-resetPassword");
+        params.put("url", "https://177aabd47942.ngrok.io/api-mobile-resetPassword");
         params.put("email", courriel);
 
         try {
@@ -215,7 +215,7 @@ public class Requests {
         String response="";
 
         //Il faut faire un concatenate pour avoir le bon URL
-        String urlReservation = "https://bc9f74bc64d0.ngrok.io/api-mobile-annuleremprunt/api-mobile-reserverPieces/"+idPiece+"/"+qqtPiece+"/"+idUser+"/"+retour;
+        String urlReservation = "https://177aabd47942.ngrok.io/api-mobile-reserverPieces/"+idPiece+"/"+qqtPiece+"/"+idUser+"/"+retour;
         try {
             response = new webApiGetRequest().execute(urlReservation).get();
 
@@ -223,7 +223,7 @@ public class Requests {
             JSONObject obj = (JSONObject) parse.parse(response);
 
 
-            idReservation =  Integer.parseInt( obj.get("code").toString());
+            idReservation =  Integer.parseInt( obj.get("idEmprunt").toString());
 
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -247,7 +247,7 @@ public class Requests {
         int responseCode=1;
 
 
-        String urlCancel = "https://bc9f74bc64d0.ngrok.io/api-mobile-checkBDVersion/" + String.valueOf(currentbdversion);
+        String urlCancel = "https://177aabd47942.ngrok.io/api-mobile-checkBDVersion/" + String.valueOf(currentbdversion);
         try {
             response = new webApiGetRequest().execute(urlCancel).get();
 
@@ -280,7 +280,7 @@ public class Requests {
         String response="";
 
         //NEED SQL QUERRY FOR CURRENT DB
-        String urlCancel = "https://bc9f74bc64d0.ngrok.io/api-mobile-list";
+        String urlCancel = "https://177aabd47942.ngrok.io/api-mobile-list";
         try {
             return response = new webApiGetRequest().execute(urlCancel).get();
         } catch (ExecutionException e) {
@@ -300,7 +300,7 @@ public class Requests {
         String response="";
 
         //NEED SQL QUERRY FOR CURRENT DB
-        String urlCancel = "https://bc9f74bc64d0.ngrok.io/api-mobile-listeComplete";
+        String urlCancel = "https://177aabd47942.ngrok.io/api-mobile-listeComplete";
 
         try {
             return response = new webApiGetRequest().execute(urlCancel).get();
@@ -318,7 +318,7 @@ public class Requests {
      * @return un string qui est la liste des categorie
      */
     public String downloadCat(){
-        String urlcat = "https://bc9f74bc64d0.ngrok.io/api-mobile-getCategories";
+        String urlcat = "https://177aabd47942.ngrok.io/api-mobile-getCategories";
         String response = "";
         String cat;
 
@@ -341,7 +341,7 @@ public class Requests {
      */
     public String loadEmprunt(String idUser){
 
-        String urlrequeteParUser= "https://bc9f74bc64d0.ngrok.io/api-mobile-checkEmpruntUser"+idUser;
+        String urlrequeteParUser= "https://177aabd47942.ngrok.io/api-mobile-checkEmpruntUser/" + idUser;
 
         String response = "";
         try {

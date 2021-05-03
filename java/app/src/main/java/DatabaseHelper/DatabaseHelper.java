@@ -28,9 +28,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.projetpiece.Requests;
 
+//import org.json.JSONArray;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -200,6 +202,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             ContentValues values = new ContentValues();
 
+            values.put(KEY_ID, p.getId());
             values.put(KEY_NOM, p.getNom());
             values.put(KEY_DESCRIPTION, p.getDescription());
             values.put(KEY_QTEDISPONIBLE, p.getQTEDisponible());
@@ -219,6 +222,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+
+        values.put(KEY_ID, e.getId());
         values.put(KEY_QTEEMPRUNTER, e.getQTEEmprunter());
         @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String strDate = formatter.format(e.getDateDemande());
@@ -383,9 +388,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void trunctateALL(){
         SQLiteDatabase database = this.getWritableDatabase();
 
-        //database.execSQL("DELETE FROM " + TABLE_PIECE);
-        //database.execSQL("DELETE FROM " + TABLE_CATEGORIE);
-        //database.execSQL("DELETE FROM " + TABLE_EMPRUNTPERSONNEL);
+        database.execSQL("DELETE FROM " + TABLE_EMPRUNTPERSONNEL);
+        database.execSQL("DELETE FROM " + TABLE_PIECE);
+        database.execSQL("DELETE FROM " + TABLE_CATEGORIE);
+
     }
 
 
@@ -397,7 +403,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<Empruntpersonnel> getListEmprunts() throws ParseException {
         List<Empruntpersonnel> listEmprunt = new ArrayList<>();
 
-        String query = "SELECT * FROM " + TABLE_EMPRUNTPERSONNEL;
+        String query = "SELECT * FROM " + TABLE_EMPRUNTPERSONNEL + " WHERE " +  KEY_ETATCOURANT  + " != 'Terminer'" ;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(query, null);
@@ -607,24 +613,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             JSONObject data_obj = (JSONObject) parse.parse(emprunt);
 
-            JSONArray arr = (JSONArray) data_obj.get("lstEmprunts");
+            JSONArray arr = (JSONArray) data_obj.get("lstEmprunt");
+            if(arr == null)
+                return;
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
             for (int i = 0; i < arr.size(); i++) {
 
                 JSONObject new_obj = (JSONObject) arr.get(i);
 
-                JSONArray finarr = (JSONArray) new_obj.get("dateRetourPrevue");
-                JSONArray debutarr = (JSONArray) new_obj.get("dateDemande");
-                Date DateDebut = formatter.parse(debutarr.get(1).toString());
-                Date DateFin = formatter.parse(new_obj.get(1).toString());
+
+
+                JSONObject dateFinJSON = (JSONObject) parse.parse(new_obj.get("dateRetourPrevue").toString());
+                JSONObject dateDebutJSON = (JSONObject) parse.parse(new_obj.get("dateDemande").toString());
+
+
+                Date DateDebut = formatter.parse(dateDebutJSON.get("date").toString());
+                Date DateFin = formatter.parse(dateFinJSON.get("date").toString());
 
                 Empruntpersonnel e = new Empruntpersonnel(
-                        Integer.parseInt(new_obj.get("qteDisponible").toString()),
+                        Integer.parseInt(new_obj.get("qteActuelle").toString()),
                         DateDebut,
                         DateFin,
                         new_obj.get("Etat").toString(),
-                        Integer.parseInt(new_obj.get(1).toString()),                //apparemnt 1 est la clé du id piece
+                        Integer.parseInt(new_obj.get("1").toString()),                //apparemnt 1 est la clé du id piece
                         true);
 
                addEmprunt(e, idUser);

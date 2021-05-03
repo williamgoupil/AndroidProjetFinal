@@ -60,6 +60,12 @@ public class EmpruntActivity extends AppCompatActivity {
         setTitle("Liste des emprunts");
         //addEmpruntDB();
         db = DatabaseHelper.getInstance(this);
+        sessionManager = new SessionManager(getApplicationContext());
+
+        bootload bootload = new bootload();
+        if(isNetworkAvailable()){
+            bootload.execute(db,sessionManager.getID());
+        }
 
 
         recyclerView = (RecyclerView) findViewById(R.id.RVEmprunt);
@@ -115,28 +121,7 @@ public class EmpruntActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
 
-        super.onResume();
-        db = DatabaseHelper.getInstance(this);
-        bootload bootload = new bootload();
-        if(isNetworkAvailable()){
-            bootload.execute(db,sessionManager.getID());
-        }
-    }
-
-    @Override
-    protected void onStart() {
-
-        super.onStart();
-
-        db = DatabaseHelper.getInstance(this);
-        bootload bootload = new bootload();
-        if(isNetworkAvailable()){
-            bootload.execute(db,sessionManager.getID());
-        }
-    }
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
