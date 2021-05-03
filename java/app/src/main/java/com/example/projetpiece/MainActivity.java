@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity  {
 
                 //si l'api nous retourne vrai, c'est que le courriel et le mot de passe sont les bons
                 if ((userInfo.get("authenticated")).equals("true")) {
-                    bootload();
+
                     sessionManager.setLogin(true);
                     sessionManager.setCourriel(sCourriel);
                     sessionManager.setID(userInfo.get("id"));
@@ -137,57 +137,26 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-    /**
-     * s'éxécute lorsque l'utilisateur c'est connecté pour telecharger les infos nécéssaire
-     */
-    public void bootload(){
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        db = DatabaseHelper.getInstance(this);
+        bootload bootload = new bootload();
+        bootload.execute(db,sessionManager.getID());
+    }
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
 
         db = DatabaseHelper.getInstance(this);
-
-        if(isNetworkAvailable()) {
-            downloadDBInfo();
-            db.checkUnsent();
-            db.loadEmprunt( requests.loadEmprunt(sessionManager.getID()),sessionManager.getID());
-
-          
-        }
-
-    }
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null;
+        bootload bootload = new bootload();
+        bootload.execute(db, sessionManager.getID());
     }
 
-    public void downloadDBInfo(){
 
-        db = DatabaseHelper.getInstance(this);
-
-
-        int responseCodeBD = requests.checkBDVersion(db.getcurrentDBVersion());
-        CharSequence text = "";
-        if( responseCodeBD == 0 ) {
-            db.loadquantity(requests.downloadQuantity());
-            text = "BD a jour";
-        } else {
-
-            db.checkUnsent();
-            db.trunctateALL();
-
-            db.newBDVersion(responseCodeBD);
-            db.loadNewCat(requests.downloadCat());
-            db.loadNewInventory(requests.downloadFullBD());
-            text = "BD mise a jour";
-        }
-
-        Context context = getApplicationContext();
-
-        int duration = Toast.LENGTH_LONG;
-
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
-    }
 
 
 

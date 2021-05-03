@@ -215,7 +215,7 @@ public class Requests {
         String response="";
 
         //Il faut faire un concatenate pour avoir le bon URL
-        String urlReservation = "https://bc9f74bc64d0.ngrok.io/api-mobile-annuleremprunt/api-mobile-reserverPieces/"+idPiece+qqtPiece+idUser+retour;
+        String urlReservation = "https://bc9f74bc64d0.ngrok.io/api-mobile-annuleremprunt/api-mobile-reserverPieces/"+idPiece+"/"+qqtPiece+"/"+idUser+"/"+retour;
         try {
             response = new webApiGetRequest().execute(urlReservation).get();
 

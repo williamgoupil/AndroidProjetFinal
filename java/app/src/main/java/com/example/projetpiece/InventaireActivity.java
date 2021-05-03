@@ -19,24 +19,19 @@
 
 package com.example.projetpiece;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 
- import com.example.projetpiece.AdapterInventaire;
- import com.example.projetpiece.R;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
- import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
+
 import DatabaseHelper.DatabaseHelper;
 import model.Categorie;
 import model.Piece;
@@ -52,6 +47,7 @@ public class InventaireActivity extends AppCompatActivity {
 
     private Spinner filterCategorie;
     private String lastFilterCategorie;
+    private SessionManager sessionManager;
 
     /**
      * Méthode qui fait la création de la page d'inventaire
@@ -82,7 +78,9 @@ public class InventaireActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        db = DatabaseHelper.getInstance(this);
+        bootload bootload = new bootload();
+        bootload.execute(db,sessionManager.getID());
         setFilterCategorie();
         insertRV();
     }

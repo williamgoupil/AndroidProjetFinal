@@ -43,6 +43,7 @@ public class EmpruntActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private List<Empruntpersonnel> listEmprunt = new ArrayList<>();
+    private SessionManager sessionManager;
 
     /**
      * Méthode qui fait la création de la page de la liste des emprunts
@@ -109,5 +110,24 @@ public class EmpruntActivity extends AppCompatActivity {
         db.addEmprunt(e,UserEmail);
 
 
+    }
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        db = DatabaseHelper.getInstance(this);
+        bootload bootload = new bootload();
+        bootload.execute(db,sessionManager.getID());
+    }
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+
+        db = DatabaseHelper.getInstance(this);
+        bootload bootload = new bootload();
+        bootload.execute(db, sessionManager.getID());
     }
 }
